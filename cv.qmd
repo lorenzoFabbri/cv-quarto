@@ -1,2 +1,192 @@
 ---
+author: Lorenzo Fabbri
+title: PhD Student
+format:
+  classic-cv-pdf: default
+cvfooter:
+  left: "https://epilorenzofabbri.com/"
+  right: "https://github.com/lorenzoFabbri"
+cvcolor: 58748F
+cvfont: raleway
+cvmeta:
+  - title: Status
+    left: PhD Student at the Barcelona Institute for Global Health
+    right: Barcelona, Spain
+  - title: Field
+    left: Causal Inference, Epidemiology
+execute:
+  echo: false
+editor_options:
+  chunk_output_type: console
 ---
+
+```{r}
+cvevents <- function(tbl, what, when, where, details) {
+  command_start <- "\\cvevent"
+  res <- paste0(
+    command_start,
+    "{", tbl[[when]], "}",
+    "{", tbl[[what]], "}",
+    "{", tbl[[where]], "}"
+  )
+  
+  tbl[[details]] <- sapply(
+    tbl[[details]], function(x) {
+      paste0("{", x, "}", collapse = ",")
+    }
+  )
+  res <- paste0(res, "{", tbl[[details]], "}")
+  
+  cat(res, sep = "\n")
+}
+```
+
+```{r}
+my_orcid <- "0000-0003-3031-322X"
+```
+
+# Summary
+
+I am a PhD student at the Barcelona Institute for Global Health (ISGlobal).
+I work under the supervision of Prof. [Martine Vrijheid](https://www.isglobal.org/en/our-team/-/profiles/18514).
+My main topic of interest is the use of modern Causal Inference methods to answer questions in the broad field of Environmental Neuroepidemiology.
+I am also profoundly interested in Open Science and Reproducible Research.
+
+I received my Bachelor’s degree in Biotechnology and my Master’s degree in Quantitative and Computational Biology.
+
+You can find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
+
+# Working Experience
+
+```{r}
+#| label: work_experience
+#| output: asis
+
+exp_raw <- rorcid::orcid_employments(orcid = my_orcid)
+exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    employment_summary_end_date_year_value = tidyr::replace_na(
+      employment_summary_end_date_year_value, "Present"
+    ),
+    role = employment_summary_role_title,
+    location = paste0(
+      employment_summary_organization_name,
+      " (",
+      employment_summary_organization_address_city,
+      ", ",
+      employment_summary_organization_address_country,
+      ")"
+    ),
+    dates = paste0(
+      employment_summary_start_date_year_value,
+      " - ",
+      employment_summary_end_date_year_value
+    ),
+    details = NA
+  ) |>
+  cvevents(
+    what = "role",
+    when = "dates",
+    where = "location",
+    details = "details"
+  )
+```
+
+# Honors and Awards
+
+```{r}
+#| label: honors
+#| output: asis
+
+honors_raw <- rorcid::orcid_distinctions(orcid = my_orcid)
+honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    details = ""
+  ) |>
+  cvevents(
+    what = "distinction_summary_role_title",
+    when = "distinction_summary_start_date_year_value",
+    where = "distinction_summary_organization_name",
+    details = "details"
+  )
+```
+
+# Publications
+
+```{r}
+#| label: publications
+#| output: asis
+```
+
+# Conference Presentations
+
+```{r}
+#| label: posters
+#| output: asis
+```
+
+# Education
+
+```{r}
+#| label: education
+#| output: asis
+
+edu_raw <- rorcid::orcid_educations(orcid = my_orcid)
+edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    education_summary_end_date_year_value = tidyr::replace_na(
+      education_summary_end_date_year_value, "Present"
+    ),
+    degree = education_summary_role_title,
+    location = paste0(
+      education_summary_organization_name,
+      " (",
+      education_summary_organization_address_city,
+      ", ",
+      education_summary_organization_address_country,
+      ")"
+    ),
+    dates = paste0(
+      education_summary_start_date_year_value,
+      " - ",
+      education_summary_end_date_year_value
+    ),
+    details = NA
+  ) |>
+  cvevents(
+    what = "degree",
+    when = "dates",
+    where = "location",
+    details = "details"
+  )
+```
+
+# Continuing Education
+
+```{r}
+#| label: cont_edu
+#| output: asis
+```
+
+# Service
+
+```{r}
+#| label: service
+#| output: asis
+```
+
+# Skills
+
+```{r}
+#| label: skills
+#| output: asis
+```
