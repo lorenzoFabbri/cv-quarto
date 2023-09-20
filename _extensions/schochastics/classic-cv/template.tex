@@ -1,146 +1,106 @@
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
-%	The MIT License (MIT)
-%
-%	Copyright (c) 2015 Jan Küster
-%
-%	Permission is hereby granted, free of charge, to any person obtaining a copy
-%	of this software and associated documentation files (the "Software"), to deal
-%	in the Software without restriction, including without limitation the rights
-%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-%	copies of the Software, and to permit persons to whom the Software is
-%	furnished to do so, subject to the following conditions:
-%	
-%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-%	THE SOFTWARE.
-%	
-%
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
-
-
-%============================================================================%
-%
+%==============================================================================%
 %	DOCUMENT DEFINITION
-%
-%============================================================================%
-\documentclass[10pt,A4]{article}	
+%==============================================================================%
 
+\documentclass[10pt, A4]{article}
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	ENCODING
-%----------------------------------------------------------------------------------------
-\usepackage[utf8]{inputenc}		
+%------------------------------------------------------------------------------%
+\usepackage[utf8]{inputenc}
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	LOGIC
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 \usepackage{xifthen}
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	FONT
-%----------------------------------------------------------------------------------------
-
-% some tex-live fonts - choose your own
+%------------------------------------------------------------------------------%
+% some tex-live fonts
 \usepackage{$cvfont$}
-
-% set font default
-\renewcommand*\familydefault{\sfdefault} 	
 \usepackage[T1]{fontenc}
-
 % more font size definitions
-\usepackage{moresize}		
+\usepackage{moresize}
+% set font default
+\renewcommand*\familydefault{\sfdefault}
 
-
-%----------------------------------------------------------------------------------------
-%	PAGE LAYOUT  DEFINITIONS
-%----------------------------------------------------------------------------------------
-\usepackage[a4paper]{geometry}		
-\geometry{top=1.25cm, bottom=-.1cm, left=1.5cm, right=1.5cm} 	
-
-\usepackage{fancyhdr}				
-\pagestyle{fancy}
+%------------------------------------------------------------------------------%
+%	PAGE LAYOUT DEFINITIONS
+%------------------------------------------------------------------------------%
+\usepackage[a4paper]{geometry}
+\usepackage{fancyhdr}
 \usepackage[colorlinks]{hyperref}
-%less space between header and content
-\setlength{\headheight}{-5pt}		
-
+\geometry{top=1.25cm, bottom=-.1cm, left=1.5cm, right=1.5cm}
+\pagestyle{fancy}
+% less space between header and content
+\setlength{\headheight}{-5pt}
 \setlength{\parindent}{0mm}
 
-%----------------------------------------------------------------------------------------
-%	TABLE /ARRAY DEFINITIONS
-%---------------------------------------------------------------------------------------- 
-%for layouting tables
-\usepackage{multicol}			
+%------------------------------------------------------------------------------%
+%	TABLE / ARRAY DEFINITIONS
+%------------------------------------------------------------------------------%
+% for layouting tables
+\usepackage{multicol}
 \usepackage{multirow}
-
-%extended aligning of tabular cells
+% extended aligning of tabular cells
 \usepackage{array}
-
 \newcolumntype{x}[1]{%
 >{\raggedleft\hspace{0pt}}p{#1}}%
 
-
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	GRAPHICS DEFINITIONS
-%---------------------------------------------------------------------------------------- 
+%------------------------------------------------------------------------------%
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{float}
-\usepackage{tikz}				
-\usetikzlibrary{shapes, backgrounds,mindmap, trees}
+\usepackage{tikz}
+\usetikzlibrary{shapes, backgrounds, mindmap, trees}
 
-
-%----------------------------------------------------------------------------------------
-%	Color DEFINITIONS
-%---------------------------------------------------------------------------------------- 
-
+%------------------------------------------------------------------------------%
+%	COLOR DEFINITIONS
+%------------------------------------------------------------------------------%
 \usepackage{color}
-
-%accent color
+% accent color
 \definecolor{sectcol}{HTML}{$cvcolor$}
+% dark background color
+\definecolor{bgcol}{RGB}{110, 110, 110}
+% light background / accent color
+\definecolor{softcol}{RGB}{225, 225, 225}
 
-%dark background color
-\definecolor{bgcol}{RGB}{110,110,110}
-
-%light background / accent color
-\definecolor{softcol}{RGB}{225,225,225}
-
-
-%============================================================================%
-%
-%
+%==============================================================================%
 %	DEFINITIONS
-%
-%
-%============================================================================%
+%==============================================================================%
 
-%----------------------------------------------------------------------------------------
-% 	HEADER
-%----------------------------------------------------------------------------------------
-
+%------------------------------------------------------------------------------%
+% HEADER
+%------------------------------------------------------------------------------%
 % remove top header line
-\renewcommand{\headrulewidth}{0pt} 
+\renewcommand{\headrulewidth}{0pt}
+% remove botttom header line
+\renewcommand{\footrulewidth}{0pt}
+% remove pagenum
+\renewcommand{\thepage}{}
+% remove section num
+\renewcommand{\thesection}{}
 
-%remove botttom header line
-\renewcommand{\footrulewidth}{0pt}	  	
-
-%remove pagenum
-\renewcommand{\thepage}{}	
-
-%remove section num		
-\renewcommand{\thesection}{}			
-
-
-%----------------------------------------------------------------------------------------
-%	custom sections
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
+%	CUSTOM SECTIONS
+%------------------------------------------------------------------------------%
+% otherwise error when compiling PDF
+$if(csl-refs)$
+  \newlength{\cslhangindent}
+  \setlength{\cslhangindent}{1.5em}
+  \newenvironment{CSLReferences}%
+    {$if(csl-hanging-indent)$
+      \setlength{\parindent}{0pt}%
+      \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces
+    $endif$}%
+  {\par}
+$endif$
 
 % create a coloured box with arrow and title as cv section headline
 % param 1: section title
-%
 \newcommand{\cvsection}[1]
 {
 	\begin{center}
@@ -148,90 +108,80 @@
 	\end{center}
 }
 
-%
 \newcommand{\metasection}[2]
 {
-\footnotesize{#2} \hspace*{\fill} \footnotesize{#1}\\[1pt]
+	\footnotesize{#2} \hspace*{\fill} \footnotesize{#1}\\[1pt]
 }
 
-%----------------------------------------------------------------------------------------
-%	 CV EVENT
-%----------------------------------------------------------------------------------------
-
+%------------------------------------------------------------------------------%
+% CV EVENT
+%------------------------------------------------------------------------------%
 % creates a stretched box as cv entry headline followed by some paragraphs about 
 % the work you did
-% param 1:	event time i.e. 2014 or 2011-2014 etc.
-% param 2:	event name (what did you do?)
-% param 3:	institution (where did you work / study)
-% param 4:	list of paragraphs
-%
+% param 1: event time i.e. 2014 or 2011-2014
+% param 2: event name (what did you do?)
+% param 3: institution (where did you work / study)
+% param 4: list of paragraphs
 \newcommand{\cvevent}[4]
 {
-
-\begin{tabular*}{1\textwidth}{p{13.6cm}  x{3.9cm}}
-	\textbf{#2}\\
-	\textcolor{bgcol}{#3} &   \vspace{2.5pt}\textcolor{sectcol}{#1}
-\end{tabular*}
-
-\vspace{-2pt}
-\textcolor{softcol}{\hrule}
-\vspace{6pt}
-\foreach \desc in {#4}{
-	*  \desc\\[3pt]
-}
-	
-\vspace{3pt}
+	\begin{tabular*}{1\textwidth}{p{13.6cm} x{3.9cm}}
+		\textbf{#2}\\
+		\textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{sectcol}{#1}
+	\end{tabular*}
+	\vspace{-2pt}
+	\textcolor{softcol}{\hrule}
+	\vspace{6pt}
+	\foreach \desc in {#4}{
+			\hspace{2em} - \desc\\[3pt]
+	}
+	\vspace{3pt}
 }
 
-% creates a stretched box as 
+% creates a stretched box
 \newcommand{\cveventmeta}[2]
 {
 	\mbox{\mystrut \hspace{87pt}\textit{#1}}\\
 	#2
 }
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 % CUSTOM STRUT FOR EMPTY BOXES
-%----------------------------------------- -----------------------------------------------
+%----------------------------------------- ------------------------------------%
 \newcommand{\mystrut}{\rule[-.3\baselineskip]{0pt}{\baselineskip}}
 
 \begin{document}
-
 \pagestyle{fancy}
 
-%---------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	TITLE HEADLINE
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 \vspace{-8pt}
 \begin{center}
-	\HUGE \textsc{$author$} \textcolor{sectcol}{\rule[-1mm]{1mm}{0.9cm}} \textsc{Resume}\\[2pt]
+	\HUGE \textsc{$author$}\\[2pt]
 	\small $title$
 \end{center}
-
 \vspace{6pt}
 
-%---------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 %	META SECTION
-%----------------------------------------------------------------------------------------
+%------------------------------------------------------------------------------%
 $for(cvmeta)$
-\metasection{$cvmeta.right$}{\textbf{$cvmeta.title$}: $cvmeta.left$}
+  \metasection{$cvmeta.right$}{\textbf{$cvmeta.title$}: $cvmeta.left$}
 $endfor$
-
 \vspace{-2pt}
 \textcolor{softcol}{\hrule}
 \vspace{6pt}
-
 \normalsize
-
 \vspace{-6pt}
 $body$
 
-%--------------------------------------------------------------------------------------------------
-%	ARTIFICIAL FOOTER (fancy footer cannot exceed linewidth) 
-%--------------------------------------------------------------------------------------------------
-
+%------------------------------------------------------------------------------%
+%	ARTIFICIAL FOOTER
+%------------------------------------------------------------------------------%
 \null
 \vspace*{\fill}
-\hspace{-0.25\linewidth}\colorbox{white}{\makebox[1.5\linewidth][c]{\mystrut  \textnormal{\textcolor{sectcol}{$cvfooter.left$}  *  \textcolor{sectcol}{$cvfooter.right$}}}}
-
+\hspace{-0.25\linewidth}\colorbox{white}{\makebox[1.5\linewidth][c]{\mystrut
+		\textnormal{\textcolor{sectcol}{$cvfooter.left$} -
+		\textcolor{sectcol}{$cvfooter.right$}}}
+}
 \end{document}

@@ -4,7 +4,7 @@ title: PhD Student
 format:
   classic-cv-pdf: default
 cvfooter:
-  left: "https://epilorenzofabbri.com/"
+  left: "https://epilorenzofabbri.com"
   right: "https://github.com/lorenzoFabbri"
 cvcolor: 58748F
 cvfont: raleway
@@ -14,6 +14,7 @@ cvmeta:
     right: Barcelona, Spain
   - title: Field
     left: Causal Inference, Epidemiology
+bibliography: bibliography.bib
 execute:
   echo: false
 editor_options:
@@ -43,6 +44,7 @@ cvevents <- function(tbl, what, when, where, details) {
 
 ```{r}
 my_orcid <- "0000-0003-3031-322X"
+my_googlescholar <- "QbPv1H0AAAAJ"
 ```
 
 # Summary
@@ -119,10 +121,13 @@ honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 
 # Publications
 
-```{r}
-#| label: publications
-#| output: asis
-```
+---
+nocite: |
+  @*
+---
+
+::: {#refs}
+:::
 
 # Conference Presentations
 
