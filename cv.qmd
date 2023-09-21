@@ -1,20 +1,12 @@
 ---
-author: Lorenzo Fabbri
-title: PhD Student
+title: Lorenzo Fabbri
 format:
-  classic-cv-pdf: default
-cvfooter:
-  left: "https://epilorenzofabbri.com"
-  right: "https://github.com/lorenzoFabbri"
-cvcolor: 58748F
-cvfont: raleway
-cvmeta:
-  - title: Status
-    left: PhD Student at the Barcelona Institute for Global Health
-    right: Barcelona, Spain
-  - title: Field
-    left: Causal Inference, Epidemiology
+  pdf:
+    include-in-header:
+      - partials/header.tex
+    documentclass: article
 bibliography: bibliography.bib
+csl: ama11.csl
 execute:
   echo: false
 editor_options:
@@ -56,7 +48,7 @@ I am also profoundly interested in Open Science and Reproducible Research.
 
 I received my Bachelor’s degree in Biotechnology and my Master’s degree in Quantitative and Computational Biology.
 
-You can find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
+My personal webpage is [here](https://epilorenzofabbri.com). You can also find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
 
 # Working Experience
 
