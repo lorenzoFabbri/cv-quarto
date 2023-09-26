@@ -66,6 +66,20 @@
 }
 
 %------------------------------------------------------------------------------%
+% CV Short Event
+%------------------------------------------------------------------------------%
+% param 1: event time
+% param 2: event name
+% param 3: institution
+\newcommand{\cvshortevent}[3] {
+	\begin{tabular*}{1\textwidth}{p{13.6cm}x{3.9cm}}
+		\textbf{#2}\\
+		\textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{sectcol}{#1}
+	\end{tabular*}
+	\vspace{3pt}
+}
+
+%------------------------------------------------------------------------------%
 % Empty box
 %----------------------------------------- ------------------------------------%
 \newcommand{\mystrut}{\rule[-.3\baselineskip]{0pt}{\baselineskip}}

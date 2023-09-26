@@ -32,6 +32,18 @@ cvevents <- function(tbl, what, when, where, details) {
   
   cat(res, sep = "\n")
 }
+
+cvshortevents <- function(tbl, what, when, where) {
+  command_start <- "\\cvshortevent"
+  res <- paste0(
+    command_start,
+    "{", tbl[[when]], "}",
+    "{", tbl[[what]], "}",
+    "{", tbl[[where]], "}"
+  )
+  
+  cat(res, sep = "\n")
+}
 ```
 
 ```{r}
@@ -65,7 +77,6 @@ exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
     employment_summary_end_date_year_value = tidyr::replace_na(
       employment_summary_end_date_year_value, "Present"
     ),
-    role = employment_summary_role_title,
     location = paste0(
       employment_summary_organization_name,
       " (",
@@ -79,13 +90,41 @@ exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
       " - ",
       employment_summary_end_date_year_value
     ),
-    details = NA
+    details = ""
   ) |>
   cvevents(
-    what = "role",
+    what = "employment_summary_role_title",
     when = "dates",
     where = "location",
     details = "details"
+  )
+```
+
+# Funding
+
+```{r}
+#| label: funding
+#| output: asis
+
+funds_raw <- rorcid::orcid_fundings(orcid = my_orcid)
+funds <- funds_raw$`0000-0003-3031-322X`$group$`funding-summary` |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    location = paste0(
+      organization_name,
+      " (",
+      organization_address_city,
+      ", ",
+      organization_address_country,
+      ")"
+    )
+  ) |>
+  cvshortevents(
+    what = "title_title_value",
+    when = "start_date_year_value",
+    where = "location"
   )
 ```
 
@@ -100,14 +139,10 @@ honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
-  dplyr::mutate(
-    details = ""
-  ) |>
-  cvevents(
+  cvshortevents(
     what = "distinction_summary_role_title",
     when = "distinction_summary_start_date_year_value",
-    where = "distinction_summary_organization_name",
-    details = "details"
+    where = "distinction_summary_organization_name"
   )
 ```
 
@@ -126,6 +161,22 @@ nocite: |
 ```{r}
 #| label: posters
 #| output: asis
+
+conf_raw <- rorcid::works(x = my_orcid)
+conf <- conf_raw |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::filter(type == "conference-poster") |>
+  dplyr::mutate(
+    where = "",
+    details = ""
+  ) |>
+  cvevents(
+    what = "title_title_value",
+    when = "publication_date_year_value",
+    where = "location",
+    details = "details"
+  )
 ```
 
 # Education
@@ -143,7 +194,6 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
     education_summary_end_date_year_value = tidyr::replace_na(
       education_summary_end_date_year_value, "Present"
     ),
-    degree = education_summary_role_title,
     location = paste0(
       education_summary_organization_name,
       " (",
@@ -157,10 +207,10 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
       " - ",
       education_summary_end_date_year_value
     ),
-    details = NA
+    details = ""
   ) |>
   cvevents(
-    what = "degree",
+    what = "education_summary_role_title",
     when = "dates",
     where = "location",
     details = "details"
@@ -179,6 +229,28 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 ```{r}
 #| label: service
 #| output: asis
+
+service_raw <- rorcid::orcid_services(orcid = my_orcid)
+service <- service_raw$`0000-0003-3031-322X`$`affiliation-group` |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  tidyr::unnest(cols = "summaries") |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    service_summary_end_date_year_value = tidyr::replace_na(
+      service_summary_end_date_year_value, "Present"
+    ),
+    dates = paste0(
+      service_summary_start_date_year_value,
+      " - ",
+      service_summary_end_date_year_value
+    )
+  ) |>
+  cvshortevents(
+    what = "service_summary_role_title",
+    when = "dates",
+    where = "service_summary_organization_name"
+  )
 ```
 
 # Skills
