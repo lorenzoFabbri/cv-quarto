@@ -5,6 +5,7 @@ format:
     include-in-header:
       - partials/header.tex
     documentclass: article
+    cite-method: citeproc
 bibliography: bibliography.bib
 csl: ama11.csl
 execute:
