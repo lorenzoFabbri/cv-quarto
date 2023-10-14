@@ -2,12 +2,14 @@
 title: Lorenzo Fabbri
 format:
   pdf:
+    documentclass: article
     include-in-header:
       - partials/header.tex
-    documentclass: article
+    filters:
+      - partials/styles.lua
     cite-method: citeproc
 bibliography: bibliography.bib
-csl: ama11.csl
+csl: partials/ama11.csl
 execute:
   echo: false
 editor_options:
@@ -161,20 +163,18 @@ nocite: |
 #| label: posters
 #| output: asis
 
-conf_raw <- rorcid::works(x = my_orcid)
-conf <- conf_raw |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::filter(type == "conference-poster") |>
-  dplyr::mutate(
-    where = "",
-    details = ""
-  ) |>
-  cvevents(
-    what = "title_title_value",
-    when = "publication_date_year_value",
-    where = "location",
-    details = "details"
+conf <- tibble::tribble(
+  ~what, ~when, ~where,
+  "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic profiles: a panel study", "2022", "ISEE Annual Conference, Athens (GR)",
+  "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic markers in a population-based child cohort", "2022", "EURION Cluster Annual Meeting (online)",
+  "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic markers in a population-based child cohort", "2022", "International Prenatal Programing and Toxicity Meeting (online)",
+  "Efficient and Portable MPI Support for Approximate Bayesian Computation", "2017", "Platform for Advanced Scientific Computing Conference, Lugano (CH)"
+) |>
+  dplyr::arrange(dplyr::desc(when)) |>
+  cvshortevents(
+    what = "what",
+    when = "when",
+    where = "where"
   )
 ```
 
@@ -206,7 +206,28 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
       " - ",
       education_summary_end_date_year_value
     ),
-    details = ""
+    details = list(
+      c(
+        "Projects: HELIX, ATHLETE, OBERON.",
+        "Supervisors: Prof. Martine Vrijheid (ISGlobal)."
+      ),
+      c(
+        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity.",
+        "Supervisors: Dr. Cesare Furlanello (FBK), Dr. Marco Chierici (FBK), Prof. Enrico Domenici (UNITN).",
+        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases.",
+        "Supervisors: Prof. Rebecca Wade (HITS), Dr. Daria Kokh (HITS), Prof. Raffaello Potestio (UNITN).",
+        "Final mark: 110/110 With Honors."
+      ),
+      c(
+        "Project: Investigation by Computational Techniques of Channelopaties related to Sodium Channels.",
+        "Supervisors: Prof. Vittorio Limongelli (USI), Prof. Daniele Di Marino (USI)."
+      ),
+      c(
+        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid.",
+        "Supervisors: Prof. Elena Maestri (UNIPR), Prof. Lars M. Blank (RWTH), Dr. Henrik Cordes (RWTH).",
+        "Final mark: 103/110."
+      )
+    )
   ) |>
   cvevents(
     what = "education_summary_role_title",
@@ -283,6 +304,22 @@ service <- service_raw$`0000-0003-3031-322X`$`affiliation-group` |>
 # Skills
 
 ```{r}
-#| label: skills
 #| output: asis
+
+skills <- tibble::tribble(
+  ~what, ~details,
+  "Languages", "Italian (native), English (C1, IELTS 7.0), Spanish (basic)",
+  "Programming Languages", "R, Python, MATLAB, C",
+  "Markup Languages", "LaTeX, RMarkdown",
+  "Software Development", "git, SLURM, High Performance Scientific Computing"
+) |>
+  flextable::flextable() |>
+  flextable::delete_part(
+    part = "header"
+  )
+
+skills |>
+  flextable::width(
+    width = 16.5 * 0.3937 * (dim(skills)$widths / sum(dim(skills)$widths))
+  )
 ```

@@ -2,6 +2,7 @@
 \geometry{top=1.25cm, bottom=-.1cm, left=1.5cm, right=1.5cm}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{changepage}
 \usepackage{raleway}
 \usepackage{moresize}
 \usepackage{fancyhdr}
@@ -45,6 +46,19 @@
 %------------------------------------------------------------------------------%
 
 %------------------------------------------------------------------------------%
+% Custom section
+\newcommand{\cvsection}[1] {
+  \begin{center}
+    \large\textcolor{sectcol}{\textbf{#1}}
+  \end{center}
+}
+
+\newcommand{\metasection}[2] {
+  \footnotesize{#2} \hspace*{\fill} \footnotesize{#1}\\[1pt]
+}
+%------------------------------------------------------------------------------%
+
+%------------------------------------------------------------------------------%
 % CV Event
 %------------------------------------------------------------------------------%
 % param 1: event time
@@ -59,9 +73,11 @@
 	\vspace{-2pt}
 	\textcolor{softcol}{\hrule}
 	\vspace{6pt}
-	\foreach \desc in {#4}{
-			\hspace{2em} - \desc\\[3pt]
-	}
+	\begin{adjustwidth}{2.5em}{0pt}
+  	\foreach \desc in {#4}{
+  			- \desc\\[3pt]
+  	}
+	\end{adjustwidth}
 	\vspace{3pt}
 }
 
