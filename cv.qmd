@@ -3,11 +3,14 @@ title: Lorenzo Fabbri
 format:
   pdf:
     documentclass: article
+    fontsize: 10pt
     include-in-header:
       - partials/header.tex
     filters:
       - partials/styles.lua
-    cite-method: citeproc
+      - partials/dociteproc.lua
+      - partials/boldname.lua
+    citeproc: false
 bibliography: bibliography.bib
 csl: partials/ama11.csl
 execute:
@@ -56,14 +59,14 @@ my_googlescholar <- "QbPv1H0AAAAJ"
 
 # Summary
 
-I am a PhD student at the Barcelona Institute for Global Health (ISGlobal).
+I am a PhD student at the Barcelona Institute for Global Health ([ISGlobal](https://www.isglobal.org/en#)).
 I work under the supervision of Prof. [Martine Vrijheid](https://www.isglobal.org/en/our-team/-/profiles/18514).
 My main topic of interest is the use of modern Causal Inference methods to answer questions in the broad field of Environmental Neuroepidemiology.
 I am also profoundly interested in Open Science and Reproducible Research.
 
 I received my Bachelor’s degree in Biotechnology and my Master’s degree in Quantitative and Computational Biology.
 
-My personal webpage is [here](https://epilorenzofabbri.com). You can also find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
+My personal webpage can be found [here](https://epilorenzofabbri.com). You can also find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
 
 # Working Experience
 
@@ -149,6 +152,8 @@ honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 
 # Publications
 
+My ORCiD is [0000-0003-3031-322X](https://orcid.org/0000-0003-3031-322X).
+
 ---
 nocite: |
   @*
@@ -158,6 +163,8 @@ nocite: |
 :::
 
 # Conference Presentations
+
+The posters can be found [here](https://figshare.com/authors/Lorenzo_Fabbri/11879642).
 
 ```{r}
 #| label: posters
@@ -208,23 +215,18 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
     ),
     details = list(
       c(
-        "Projects: HELIX, ATHLETE, OBERON.",
-        "Supervisors: Prof. Martine Vrijheid (ISGlobal)."
+        "Supervisor: Prof. Martine Vrijheid."
       ),
       c(
-        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity.",
-        "Supervisors: Dr. Cesare Furlanello (FBK), Dr. Marco Chierici (FBK), Prof. Enrico Domenici (UNITN).",
-        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases.",
-        "Supervisors: Prof. Rebecca Wade (HITS), Dr. Daria Kokh (HITS), Prof. Raffaello Potestio (UNITN).",
+        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity. Supervised by: Dr. Cesare Furlanello, Dr. Marco Chierici, Prof. Enrico Domenici.",
+        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases. Supervised by: Prof. Rebecca Wade, Dr. Daria Kokh, Prof. Raffaello Potestio.",
         "Final mark: 110/110 With Honors."
       ),
       c(
-        "Project: Investigation by Computational Techniques of Channelopaties related to Sodium Channels.",
-        "Supervisors: Prof. Vittorio Limongelli (USI), Prof. Daniele Di Marino (USI)."
+        "Project (USI, Lugano (CH)): Investigation by Computational Techniques of Channelopaties related to Sodium Channels. Supervised by: Prof. Vittorio Limongelli, Prof. Daniele Di Marino."
       ),
       c(
-        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid.",
-        "Supervisors: Prof. Elena Maestri (UNIPR), Prof. Lars M. Blank (RWTH), Dr. Henrik Cordes (RWTH).",
+        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid. Supervised by: Prof. Elena Maestri, Prof. Lars M. Blank, Dr. Henrik Cordes.",
         "Final mark: 103/110."
       )
     )
@@ -246,7 +248,7 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 cont_edu <- tibble::tribble(
   ~what, ~when, ~where,
   "Spring School in Causal Inference with Observational Data", "04/2022", "Causal Insights, Leeds (UK)",
-  "Computational Bayesian methods using brms in R", "02/2022", "Physalia‑courses, online",
+  "Computational Bayesian methods using brms in R", "02/2022", "Physalia Courses, online",
   "ELIXIR Omics Integration and Systems Biology", "09/2021", "National Bioinformatics Infrastructure Sweden, online",
   "Fundamentals of Epidemiology (EPM101)", "09/2021", "LSHTM, online",
   "Advanced Statistics: Statistical Modelling", "08/2021", "Swiss Institute of Bioinformatics, online",
@@ -316,7 +318,19 @@ skills <- tibble::tribble(
   flextable::flextable() |>
   flextable::delete_part(
     part = "header"
-  )
+  ) |>
+  flextable::bold(
+    j = 1,
+    bold = TRUE,
+    part = "all"
+  ) |>
+  flextable::font(
+    fontname = "Computer Modern"
+  ) |>
+  flextable::fontsize(
+    size = 10
+  ) |>
+  flextable::border_remove()
 
 skills |>
   flextable::width(
