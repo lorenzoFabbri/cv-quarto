@@ -246,7 +246,7 @@
     },
     "flextable": {
       "Package": "flextable",
-      "Version": "0.9.3",
+      "Version": "0.9.4",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -266,7 +266,7 @@
         "uuid",
         "xml2"
       ],
-      "Hash": "73798b453ca1c8421a64a6ea0e045ba5"
+      "Hash": "db48820af2b3e5afa64726cf5615da27"
     },
     "fontBitstreamVera": {
       "Package": "fontBitstreamVera",
@@ -325,7 +325,7 @@
     },
     "gdtools": {
       "Package": "gdtools",
-      "Version": "0.3.3",
+      "Version": "0.3.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -338,7 +338,7 @@
         "systemfonts",
         "tools"
       ],
-      "Hash": "98158453e15bbd2486fac8454f4b4409"
+      "Hash": "dcbec937764c19774f6f719e6bf45c69"
     },
     "generics": {
       "Package": "generics",
@@ -430,7 +430,7 @@
     },
     "httpuv": {
       "Package": "httpuv",
-      "Version": "1.6.11",
+      "Version": "1.6.12",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -441,7 +441,7 @@
         "promises",
         "utils"
       ],
-      "Hash": "838602f54e32c1a0f8cc80708cefcefa"
+      "Hash": "c992f75861325961c29a188b45e549f7"
     },
     "httr": {
       "Package": "httr",
@@ -586,7 +586,7 @@
     },
     "officer": {
       "Package": "officer",
-      "Version": "0.6.2",
+      "Version": "0.6.3",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -601,7 +601,7 @@
         "xml2",
         "zip"
       ],
-      "Hash": "d570077027cfedcf743d86838ffbd885"
+      "Hash": "8bf043833d27228a38e0be2517230bcd"
     },
     "openssl": {
       "Package": "openssl",
@@ -770,7 +770,7 @@
     },
     "shiny": {
       "Package": "shiny",
-      "Version": "1.7.5",
+      "Version": "1.7.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -800,7 +800,7 @@
         "withr",
         "xtable"
       ],
-      "Hash": "438b99792adbe82a8329ad8697d45afe"
+      "Hash": "5ec01cc255f2138fc2f0dc74d2b1a1a1"
     },
     "snakecase": {
       "Package": "snakecase",
@@ -955,13 +955,13 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.47",
+      "Version": "0.48",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "xfun"
       ],
-      "Hash": "8d4ccb733843e513c1c1cdd66a759f0d"
+      "Hash": "8f96d229b7311beb32b94cf413b13f84"
     },
     "triebeard": {
       "Package": "triebeard",
@@ -988,13 +988,13 @@
     },
     "utf8": {
       "Package": "utf8",
-      "Version": "1.2.3",
+      "Version": "1.2.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "1fe17157424bb09c48a8b3b550c753bc"
+      "Hash": "62b65c52671e6665f803ff02954446e9"
     },
     "uuid": {
       "Package": "uuid",
