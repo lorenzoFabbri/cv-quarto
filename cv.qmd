@@ -66,7 +66,7 @@ I am also profoundly interested in Open Science and Reproducible Research.
 
 I received my Bachelor’s degree in Biotechnology and my Master’s degree in Quantitative and Computational Biology.
 
-My personal webpage can be found [here](https://epilorenzofabbri.com). You can also find me on [Twitter](https://twitter.com/lorenzoF_SM), [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social), [Mastodon](https://fediscience.org/@lorenzoF), and [GitHub](https://github.com/lorenzoFabbri).
+My personal webpage can be found [here](https://epilorenzofabbri.com). You can also find me on [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social) and [GitHub](https://github.com/lorenzoFabbri).
 
 # Working Experience
 
@@ -124,6 +124,10 @@ funds <- funds_raw$`0000-0003-3031-322X`$group$`funding-summary` |>
       organization_address_country,
       ")"
     )
+  ) |>
+  dplyr::arrange(
+    dplyr::desc(start_date_year_value),
+    title_title_value
   ) |>
   cvshortevents(
     what = "title_title_value",
