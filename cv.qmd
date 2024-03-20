@@ -104,6 +104,42 @@ exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
   )
 ```
 
+# Research Visits
+
+```{r}
+#| label: research_visits
+#| output: asis
+
+visits_raw <- rorcid::orcid_invited_positions(orcid = my_orcid)
+visits <- visits_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    invited_position_end_date_year_value = tidyr::replace_na(
+      invited_position_summary_end_date_year_value, "Present"
+    ),
+    location = paste0(
+      invited_position_summary_organization_name,
+      " (",
+      invited_position_summary_organization_address_city,
+      ", ",
+      invited_position_summary_organization_address_country,
+      ")"
+    ),
+    dates = paste0(
+      invited_position_summary_start_date_year_value,
+      " - ",
+      invited_position_summary_end_date_year_value
+    )
+  ) |>
+  cvshortevents(
+    what = "invited_position_summary_role_title",
+    when = "dates",
+    where = "location"
+  )
+```
+
 # Funding
 
 ```{r}
