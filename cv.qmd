@@ -2,6 +2,7 @@
 title: Lorenzo Fabbri
 format:
   pdf:
+    pdf-engine: lualatex
     documentclass: article
     fontsize: 10pt
     include-in-header:
@@ -194,6 +195,8 @@ honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 
 My ORCiD is [0000-0003-3031-322X](https://orcid.org/0000-0003-3031-322X).
 
+## Journal Articles
+
 ---
 nocite: |
   @*
@@ -201,6 +204,36 @@ nocite: |
 
 ::: {#refs}
 :::
+
+## Articles under review and revising
+
+1. Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula. *First author*
+1. Multi-omics architecture of obesity and metabolic dysfunction in childhood: identifying biological pathways and prenatal determinants. *Co-author*
+1. Diet among European children and its association with adiposity-related outcomes: a multi-country study. *Co-author*
+
+## Software Packages
+
+```{r}
+#| label: software
+#| output: asis
+
+software_raw <- rorcid::orcid_works(orcid = my_orcid)
+software <- software_raw$`0000-0003-3031-322X`$work |>
+  dplyr::filter(type == "software") |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::select(dplyr::all_of(c(
+    "title_title_value",
+    "publication_date_year_value",
+    "url_value"
+  ))) |>
+  cvshortevents(
+    what = "title_title_value",
+    when = "publication_date_year_value",
+    where = "url_value"
+  )
+```
 
 # Conference Presentations
 
@@ -240,6 +273,9 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
     education_summary_end_date_year_value = tidyr::replace_na(
       education_summary_end_date_year_value, "Present"
     ),
+    education_summary_organization_name = stringr::str_replace_all(
+      education_summary_organization_name, "\\&", "and"
+    ),
     location = paste0(
       education_summary_organization_name,
       " (",
@@ -254,6 +290,8 @@ edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
       education_summary_end_date_year_value
     ),
     details = list(
+      c(), # LSHTM
+      c(), # OU UK
       c(
         "Supervisor: Prof. Martine Vrijheid."
       ),
@@ -364,9 +402,9 @@ skills <- tibble::tribble(
     bold = TRUE,
     part = "all"
   ) |>
-  flextable::font(
-    fontname = "Computer Modern"
-  ) |>
+  # flextable::font(
+  #   fontname = "Computer Modern"
+  # ) |>
   flextable::fontsize(
     size = 10
   ) |>
