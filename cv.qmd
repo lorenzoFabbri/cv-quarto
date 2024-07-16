@@ -12,6 +12,7 @@ format:
       - partials/dociteproc.lua
       - partials/boldname.lua
     citeproc: false
+    cite-method: biblatex
 bibliography: bibliography.bib
 csl: partials/ama11.csl
 execute:
@@ -57,17 +58,6 @@ cvshortevents <- function(tbl, what, when, where) {
 my_orcid <- "0000-0003-3031-322X"
 my_googlescholar <- "QbPv1H0AAAAJ"
 ```
-
-# Summary
-
-I am a PhD student at the Barcelona Institute for Global Health ([ISGlobal](https://www.isglobal.org/en#)).
-I work under the supervision of Prof. [Martine Vrijheid](https://www.isglobal.org/en/our-team/-/profiles/18514).
-My main topic of interest is the use of modern Causal Inference methods to answer questions in the broad field of Environmental Neuroepidemiology.
-I am also profoundly interested in Open Science and Reproducible Research.
-
-I received my Bachelor’s degree in Biotechnology and my Master’s degree in Quantitative and Computational Biology.
-
-My personal webpage can be found [here](https://epilorenzofabbri.com). You can also find me on [Bluesky](https://bsky.app/profile/lorenzofepi.bsky.social) and [GitHub](https://github.com/lorenzoFabbri).
 
 # Working Experience
 
