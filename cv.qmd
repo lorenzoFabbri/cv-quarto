@@ -5,6 +5,8 @@ format:
     documentclass: article
     fontsize: 12pt
     include-in-header:
+      - text: |
+          \pagestyle{fancy}
       - partials/header.tex
     filters:
       - partials/styles.lua
