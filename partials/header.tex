@@ -1,7 +1,7 @@
 % https://github.com/schochastics/classic-cv
 
 \usepackage[a4paper]{geometry}
-\geometry{top=1.25cm, bottom=-.1cm, left=1.5cm, right=1.5cm}
+\geometry{left=20mm, top=15mm}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{changepage}
@@ -24,8 +24,10 @@
 \usepackage[sorting=ydnt]{biblatex}
 %------------------------------------------------------------------------------%
 
-% Less space between header and content
-\setlength{\headheight}{-5pt}
+\newlength{\spacebox}
+\settowidth{\spacebox}{123456789}
+\newcommand{\sepspace}{\vspace*{1em}}
+
 \setlength{\parindent}{0mm}
 
 \newcolumntype{x}[1]{%
@@ -35,6 +37,30 @@
 \renewcommand{\footrulewidth}{0pt}
 \renewcommand{\thepage}{}
 \renewcommand{\thesection}{}
+
+% Title
+\newcommand{\name}[1]{
+  \Huge
+  \begin{center} \textbf{#1} \end{center}\par
+  \normalsize\normalfont
+}
+\newcommand{\updated}[1]{
+  \large
+  \begin{center} \textsl{#1} \end{center}\par
+  \normalsize \normalfont
+}
+
+% Personal information below title
+\newcommand{\info}[2]{
+  \noindent\hangindent=2em\hangafter=0
+  \parbox{\paperwidth}{
+    \textsl{#1}
+  }
+  #2 \par
+}
+
+% Print when was the CV last updated
+\newcommand{\updateinfo}[1][\today]{\par\vfill\hfill{\scriptsize\color{gray}Last updated on #1}}
 %------------------------------------------------------------------------------%
 
 % Custom section and meta-section

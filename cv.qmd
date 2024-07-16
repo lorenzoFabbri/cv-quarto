@@ -1,10 +1,9 @@
 ---
-title: Lorenzo Fabbri
 format:
   pdf:
     pdf-engine: lualatex
     documentclass: article
-    fontsize: 10pt
+    fontsize: 12pt
     include-in-header:
       - partials/header.tex
     filters:
@@ -58,6 +57,14 @@ cvshortevents <- function(tbl, what, when, where) {
 my_orcid <- "0000-0003-3031-322X"
 my_googlescholar <- "QbPv1H0AAAAJ"
 ```
+
+\name{Lorenzo Fabbri}
+\vspace*{-10pt}
+\updated{\updateinfo}
+\sepspace
+\info{Institutional email}{\texttt{lorenzo.fabbri@isglobal.org}}
+\info{Personal email}{\texttt{lorenzo.fabbri92sm@gmail.com}}
+\sepspace
 
 # Working Experience
 
@@ -382,8 +389,6 @@ service <- service_raw$`0000-0003-3031-322X`$`affiliation-group` |>
 # Skills
 
 ```{r}
-#| output: asis
-
 skills <- tibble::tribble(
   ~what, ~details,
   "Languages", "Italian (native), English (C1, IELTS 7.0), Spanish (basic)",
@@ -391,25 +396,15 @@ skills <- tibble::tribble(
   "Markup Languages", "LaTeX, RMarkdown",
   "Software Development", "git, SLURM, High Performance Scientific Computing"
 ) |>
-  flextable::flextable() |>
-  flextable::delete_part(
-    part = "header"
-  ) |>
-  flextable::bold(
-    j = 1,
-    bold = TRUE,
-    part = "all"
-  ) |>
-  # flextable::font(
-  #   fontname = "Computer Modern"
-  # ) |>
-  flextable::fontsize(
-    size = 10
-  ) |>
-  flextable::border_remove()
+  as.data.frame()
+colnames(skills) <- NULL
 
-skills |>
-  flextable::width(
-    width = 16.5 * 0.3937 * (dim(skills)$widths / sum(dim(skills)$widths))
+tinytable::tt(skills) |>
+  tinytable::theme_tt(
+    theme = "void"
+  ) |>
+  tinytable::style_tt(
+    j = 1,
+    bold = TRUE
   )
 ```
