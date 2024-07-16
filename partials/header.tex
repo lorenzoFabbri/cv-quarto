@@ -4,6 +4,8 @@
 \geometry{left=20mm, top=15mm}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[british]{babel}
+\usepackage{csquotes}
 \usepackage{changepage}
 \usepackage{moresize}
 \usepackage{fancyhdr}
@@ -16,12 +18,48 @@
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{float}
+\floatplacement{table}{H}
 \usepackage{tikz}
 \usetikzlibrary{shapes, backgrounds, mindmap, trees}
 \usepackage{color}
 \definecolor{bgcol}{RGB}{110, 110, 110}
 \definecolor{softcol}{RGB}{225, 225, 225}
-\usepackage[sorting=ydnt]{biblatex}
+\usepackage[backend=biber, maxnames=99, sorting=ydnt]{biblatex}
+%------------------------------------------------------------------------------%
+
+% Macros to make my name bold in bibliography
+\def\makenamesetup{
+  \def\bibnamedelima{~}
+  \def\bibnamedelimb{ }
+  \def\bibnamedelimc{ }
+  \def\bibnamedelimd{ }
+  \def\bibnamedelimi{ }
+  \def\bibinitperiod{.}
+  \def\bibinitdelim{~}
+  \def\bibinithyphendelim{.-}
+}
+\newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
+\newcommand*{\boldname}[3]{
+  \def\lastname{#1}
+  \def\firstname{#2}
+  \def\firstinit{#3}
+}
+\renewcommand{\mkbibnamegiven}[1]{
+  \ifboolexpr{
+    (test {\ifdefequal{\firstname}{\namepartgiven}} or
+    test {\ifdefequal{\firstinit}{\namepartgiven}}) and
+    test {\ifdefequal{\lastname}{\namepartfamily}}
+  }
+  {\mkbibbold{#1}}{#1}
+}
+\renewcommand{\mkbibnamefamily}[1]{
+  \ifboolexpr{
+    (test {\ifdefequal{\firstname}{\namepartgiven}} or
+    test {\ifdefequal{\firstinit}{\namepartgiven}}) and
+    test {\ifdefequal{\lastname}{\namepartfamily}}
+  }
+  {\mkbibbold{#1}}{#1}
+}
 %------------------------------------------------------------------------------%
 
 \newlength{\spacebox}

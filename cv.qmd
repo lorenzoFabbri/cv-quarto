@@ -8,8 +8,6 @@ format:
       - partials/header.tex
     filters:
       - partials/styles.lua
-      - partials/dociteproc.lua
-      - partials/boldname.lua
     citeproc: false
     cite-method: biblatex
 bibliography: bibliography.bib
@@ -200,6 +198,8 @@ Code for my PhD research output can be found [here](https://github.com/stars/lor
 nocite: |
   @*
 ---
+
+\boldname{Fabbri}{Lorenzo}{L.}
 
 ::: {#refs}
 :::
