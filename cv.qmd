@@ -183,7 +183,7 @@ honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 
 # Publications
 
-My ORCiD is [0000-0003-3031-322X](https://orcid.org/0000-0003-3031-322X).
+My ORCiD is [0000-0003-3031-322X](https://orcid.org/0000-0003-3031-322X) and Google Scholar is [QbPv1H0AAAAJ](https://scholar.google.com/citations?user=QbPv1H0AAAAJ).
 
 ## Journal Articles
 
@@ -203,6 +203,8 @@ nocite: |
 
 ## Software Packages
 
+My GitHub profile can be found [here](https://github.com/lorenzoFabbri).
+
 ```{r}
 #| label: software
 #| output: asis
@@ -218,6 +220,10 @@ software <- software_raw$`0000-0003-3031-322X`$work |>
     "publication_date_year_value",
     "url_value"
   ))) |>
+  dplyr::arrange(
+    dplyr::desc("publication_date_year_value"),
+    "title_title_value"
+  ) |>
   cvshortevents(
     what = "title_title_value",
     when = "publication_date_year_value",
