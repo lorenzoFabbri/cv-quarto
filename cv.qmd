@@ -73,7 +73,7 @@ my_googlescholar <- "QbPv1H0AAAAJ"
 #| output: asis
 
 exp_raw <- rorcid::orcid_employments(orcid = my_orcid)
-exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
@@ -109,7 +109,7 @@ exp_ <- exp_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 #| output: asis
 
 visits_raw <- rorcid::orcid_invited_positions(orcid = my_orcid)
-visits <- visits_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+visits <- visits_raw[[my_orcid]]$`affiliation-group`$summaries |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
@@ -145,7 +145,7 @@ visits <- visits_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
 #| output: asis
 
 funds_raw <- rorcid::orcid_fundings(orcid = my_orcid)
-funds <- funds_raw$`0000-0003-3031-322X`$group$`funding-summary` |>
+funds <- funds_raw[[my_orcid]]$group$`funding-summary` |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
@@ -177,7 +177,7 @@ funds <- funds_raw$`0000-0003-3031-322X`$group$`funding-summary` |>
 #| output: asis
 
 honors_raw <- rorcid::orcid_distinctions(orcid = my_orcid)
-honors <- honors_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+honors <- honors_raw[[my_orcid]]$`affiliation-group`$summaries |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
@@ -220,7 +220,7 @@ My GitHub profile can be found [here](https://github.com/lorenzoFabbri).
 #| output: asis
 
 software_raw <- rorcid::orcid_works(orcid = my_orcid)
-software <- software_raw$`0000-0003-3031-322X`$work |>
+software <- software_raw[[my_orcid]]$work |>
   dplyr::filter(type == "software") |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
@@ -273,7 +273,7 @@ conf <- tibble::tribble(
 #| output: asis
 
 edu_raw <- rorcid::orcid_educations(orcid = my_orcid)
-edu <- edu_raw$`0000-0003-3031-322X`$`affiliation-group`$summaries |>
+edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   janitor::clean_names() |>
@@ -367,7 +367,7 @@ cont_edu <- tibble::tribble(
 #| output: asis
 
 service_raw <- rorcid::orcid_services(orcid = my_orcid)
-service <- service_raw$`0000-0003-3031-322X`$`affiliation-group` |>
+service <- service_raw[[my_orcid]]$`affiliation-group` |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   tidyr::unnest(cols = "summaries") |>
