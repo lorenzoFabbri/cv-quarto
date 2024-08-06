@@ -210,7 +210,6 @@ nocite: |
 
 1. Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula. *First author*
 1. Multi-omics architecture of obesity and metabolic dysfunction in childhood: identifying biological pathways and prenatal determinants. *Co-author*
-1. Diet among European children and its association with adiposity-related outcomes: a multi-country study. *Co-author*
 
 ## Software Packages
 
@@ -244,7 +243,7 @@ software <- software_raw$`0000-0003-3031-322X`$work |>
 
 # Conference Presentations
 
-The posters can be found [here](https://figshare.com/authors/Lorenzo_Fabbri/11879642).
+Posters can be found [here](https://figshare.com/authors/Lorenzo_Fabbri/11879642).
 
 ```{r}
 #| label: posters
@@ -252,6 +251,8 @@ The posters can be found [here](https://figshare.com/authors/Lorenzo_Fabbri/1187
 
 conf <- tibble::tribble(
   ~what, ~when, ~where,
+  "A precision environmental health approach to childhood obesity and metabolic dysfunction: identifying biological pathways and prenatal determinants", "2024", "ISEE Annual Conference, Santiago (CL)",
+  "Prenatal Exposure to Chemical Mixtures and Metabolic Syndrome Risk in European Children", "2024", "ISEE Annual Conference, Santiago (CL)",
   "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic profiles: a panel study", "2022", "ISEE Annual Conference, Athens (GR)",
   "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic markers in a population-based child cohort", "2022", "EURION Cluster Annual Meeting (online)",
   "Childhood exposure to non-persistent endocrine disrupting chemicals and multi-omic markers in a population-based child cohort", "2022", "International Prenatal Programing and Toxicity Meeting (online)",
