@@ -208,8 +208,7 @@ nocite: |
 
 ## Articles under review and revising
 
-1. Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula. *First author*
-1. Multi-omics architecture of obesity and metabolic dysfunction in childhood: identifying biological pathways and prenatal determinants. *Co-author*
+1. Multi-omics architecture of obesity and metabolic dysfunction in childhood: identifying biological pathways and prenatal determinants. *Co-author. Accepted in Nature Communications.*
 
 ## Software Packages
 
@@ -298,8 +297,13 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
       education_summary_end_date_year_value
     ),
     details = list(
-      c(), # LSHTM
-      c(), # OU UK
+      c(
+        "Epidemiology by Distance Learning - Individual modules.",
+        "Fundamentals of Epidemiology (EPM101). Practical Epidemiology (EPM103)."
+      ), # LSHTM
+      c(
+        "Mathematical statistics (M347)."
+      ), # OU UK
       c(
         "Supervisor: Prof. Martine Vrijheid."
       ),
@@ -336,7 +340,6 @@ cont_edu <- tibble::tribble(
   "Spring School in Causal Inference with Observational Data", "04/2022", "Causal Insights, Leeds (UK)",
   "Computational Bayesian methods using brms in R", "02/2022", "Physalia Courses, online",
   "ELIXIR Omics Integration and Systems Biology", "09/2021", "National Bioinformatics Infrastructure Sweden, online",
-  "Fundamentals of Epidemiology (EPM101)", "09/2021", "LSHTM, online",
   "Advanced Statistics: Statistical Modelling", "08/2021", "Swiss Institute of Bioinformatics, online",
   "Alpine Exposome Summer School", "06/2021", "Inserm and ATHLETE, online",
   "Metabolomics Data Processing and Data Analysis", "02/2021", "University of Birmingham, online",
@@ -367,25 +370,55 @@ cont_edu <- tibble::tribble(
 #| output: asis
 
 service_raw <- rorcid::orcid_services(orcid = my_orcid)
+memberships_raw <- rorcid::orcid_memberships(orcid = my_orcid)
 service <- service_raw[[my_orcid]]$`affiliation-group` |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
   tidyr::unnest(cols = "summaries") |>
   janitor::clean_names() |>
+  dplyr::arrange(
+    dplyr::desc(service_summary_start_date_year_value),
+    dplyr::desc(service_summary_end_date_year_value)
+  ) |>
   dplyr::mutate(
-    service_summary_end_date_year_value = tidyr::replace_na(
+    summary_end_date_year_value = tidyr::replace_na(
       service_summary_end_date_year_value, "Present"
     ),
     dates = paste0(
       service_summary_start_date_year_value,
       " - ",
-      service_summary_end_date_year_value
-    )
+      summary_end_date_year_value
+    ),
+    summary_role_title = service_summary_role_title,
+    summary_organization_name = service_summary_organization_name
+  )
+memberships <- memberships_raw[[my_orcid]]$`affiliation-group` |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  tidyr::unnest(cols = "summaries") |>
+  janitor::clean_names() |>
+  dplyr::arrange(
+    dplyr::desc(membership_summary_start_date_year_value),
+    dplyr::desc(membership_summary_end_date_year_value)
   ) |>
+  dplyr::mutate(
+    summary_end_date_year_value = tidyr::replace_na(
+      membership_summary_end_date_year_value, "Present"
+    ),
+    dates = paste0(
+      membership_summary_start_date_year_value,
+      " - ",
+      summary_end_date_year_value
+    ),
+    summary_role_title = "Member",
+    summary_organization_name = membership_summary_organization_name
+  )
+
+dplyr::bind_rows(service, memberships) |>
   cvshortevents(
-    what = "service_summary_role_title",
+    what = "summary_organization_name",
     when = "dates",
-    where = "service_summary_organization_name"
+    where = "summary_role_title"
   )
 ```
 
@@ -396,7 +429,7 @@ skills <- tibble::tribble(
   ~what, ~details,
   "Languages", "Italian (native), English (C1, IELTS 7.0), Spanish (basic)",
   "Programming Languages", "R, Python, MATLAB, C",
-  "Markup Languages", "LaTeX, RMarkdown",
+  "Markup Languages", "LaTeX, Quarto/RMarkdown",
   "Software Development", "git, SLURM, High Performance Scientific Computing"
 ) |>
   as.data.frame()
