@@ -208,8 +208,6 @@ nocite: |
 
 ## Articles under review and revising
 
-1. Multi-omics architecture of obesity and metabolic dysfunction in childhood: identifying biological pathways and prenatal determinants. *Co-author. Accepted in Nature Communications.*
-
 ## Software Packages
 
 My GitHub profile can be found [here](https://github.com/lorenzoFabbri).
