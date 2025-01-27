@@ -1,23 +1,39 @@
 ---
+title: CV
+date: last-modified
+author: Lorenzo Fabbri
+email: lorenzo.fabbri@isglobal.org
+orcid: 0000-0003-3031-322X
+scholar: QbPv1H0AAAAJ
+github: lorenzoFabbri
+jobtitle: PhD Student
+
+fontawesome: yes
+
 format:
   pdf:
-    pdf-engine: lualatex
+    pdf-engine: xelatex
     documentclass: article
-    fontsize: 12pt
+    fontsize: 11pt
     include-in-header:
-      - text: |
-          \pagestyle{fancy}
-      - partials/header.tex
+      - partials/include-in-header.tex
+    template-partials:
+      - partials/before-body.tex
     filters:
       - partials/styles.lua
     citeproc: false
     cite-method: biblatex
+
 bibliography: bibliography.bib
 csl: partials/ama11.csl
+
 execute:
   echo: false
+
 editor_options:
   chunk_output_type: console
+
+validate-yaml: false
 ---
 
 ```{r}
@@ -58,15 +74,10 @@ my_orcid <- "0000-0003-3031-322X"
 my_googlescholar <- "QbPv1H0AAAAJ"
 ```
 
-\name{Lorenzo Fabbri}
-\vspace*{-10pt}
-\updated{\updateinfo}
-\sepspace
-\info{Institutional email}{\texttt{lorenzo.fabbri@isglobal.org}}
-\info{Personal email}{\texttt{lorenzo.fabbri92sm@gmail.com}}
-\sepspace
+# Academic Appointments
 
-# Working Experience
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
 ```{r}
 #| label: work_experience
@@ -138,7 +149,10 @@ exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
 <!--   ) -->
 <!-- ``` -->
 
-# Funding
+# Grants and Fellowships
+
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
 ```{r}
 #| label: funding
@@ -172,6 +186,9 @@ funds <- funds_raw[[my_orcid]]$group$`funding-summary` |>
 
 # Honors and Awards
 
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
 ```{r}
 #| label: honors
 #| output: asis
@@ -190,11 +207,10 @@ honors <- honors_raw[[my_orcid]]$`affiliation-group`$summaries |>
 
 # Publications
 
-My ORCiD is [0000-0003-3031-322X](https://orcid.org/0000-0003-3031-322X) and Google Scholar is [QbPv1H0AAAAJ](https://scholar.google.com/citations?user=QbPv1H0AAAAJ).
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
-## Journal Articles
-
-Code for my PhD research output can be found [here](https://github.com/stars/lorenzoFabbri/lists/phd-papers).
+## Journal articles
 
 ---
 nocite: |
@@ -208,9 +224,9 @@ nocite: |
 
 ## Articles under review and revising
 
-## Software Packages
+1. *Prenatal and childhood exposure to mixtures of non-persistent endocrine disrupting chemicals (EDC) and adolescence neurodevelopment: a triangulation study.*
 
-My GitHub profile can be found [here](https://github.com/lorenzoFabbri).
+## Software packages
 
 ```{r}
 #| label: software
@@ -238,9 +254,14 @@ software <- software_raw[[my_orcid]]$work |>
   )
 ```
 
-# Conference Presentations
+# Conferences, Workshops, and Talks
 
-Posters can be found [here](https://figshare.com/authors/Lorenzo_Fabbri/11879642).
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
+## Research presentations and conference participation
+
+See [https://figshare.com/authors/Lorenzo_Fabbri](https://figshare.com/authors/Lorenzo_Fabbri/11879642) for posters.
 
 ```{r}
 #| label: posters
@@ -263,7 +284,36 @@ conf <- tibble::tribble(
   )
 ```
 
+## Talks and workshops
+
+See [https://github.com/lorenzoFabbri/talks](https://github.com/lorenzoFabbri/talks) for slides and materials.
+
+```{r}
+#| label: talks
+#| output: asis
+
+talks <- tibble::tribble(
+  ~what, ~when, ~where,
+  "Transparent causal inference for observational epidemiology", "01/2025", "Colicino Group, NYC (via Zoom)"
+) |>
+  dplyr::mutate(
+    when = lubridate::my(when)
+  ) |>
+  dplyr::arrange(dplyr::desc(when)) |>
+  dplyr::mutate(
+    when = format(as.Date(when), "%b %Y")
+  ) |>
+  cvshortevents(
+    what = "what",
+    when = "when",
+    where = "where"
+  )
+```
+
 # Education
+
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
 ```{r}
 #| label: education
@@ -329,6 +379,9 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
 
 # Continuing Education
 
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
 ```{r}
 #| label: cont_edu
 #| output: asis
@@ -363,12 +416,20 @@ cont_edu <- tibble::tribble(
 
 # Service
 
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
+## Referee
+
+*Scientific Reports* (1).
+
+## Working groups
+
 ```{r}
 #| label: service
 #| output: asis
 
 service_raw <- rorcid::orcid_services(orcid = my_orcid)
-memberships_raw <- rorcid::orcid_memberships(orcid = my_orcid)
 service <- service_raw[[my_orcid]]$`affiliation-group` |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
@@ -389,7 +450,21 @@ service <- service_raw[[my_orcid]]$`affiliation-group` |>
     ),
     summary_role_title = service_summary_role_title,
     summary_organization_name = service_summary_organization_name
+  ) |>
+  cvshortevents(
+    what = "summary_organization_name",
+    when = "dates",
+    where = "summary_role_title"
   )
+```
+
+## Professional memberships
+
+```{r}
+#| label: memberships
+#| output: asis
+
+memberships_raw <- rorcid::orcid_memberships(orcid = my_orcid)
 memberships <- memberships_raw[[my_orcid]]$`affiliation-group` |>
   dplyr::bind_rows() |>
   tibble::as_tibble() |>
@@ -410,9 +485,7 @@ memberships <- memberships_raw[[my_orcid]]$`affiliation-group` |>
     ),
     summary_role_title = "Member",
     summary_organization_name = membership_summary_organization_name
-  )
-
-dplyr::bind_rows(service, memberships) |>
+  ) |>
   cvshortevents(
     what = "summary_organization_name",
     when = "dates",
@@ -421,6 +494,9 @@ dplyr::bind_rows(service, memberships) |>
 ```
 
 # Skills
+
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
 ```{r}
 skills <- tibble::tribble(

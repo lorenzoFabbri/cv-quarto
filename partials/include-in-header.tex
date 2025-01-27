@@ -1,15 +1,36 @@
-% https://github.com/schochastics/classic-cv
+% Adapted from https://github.com/schochastics/classic-cv and https://github.com/mps9506/quarto-cv
 
 \usepackage[a4paper]{geometry}
-\geometry{left=20mm, top=15mm}
+\geometry{top=10mm, bottom=20mm, left=10mm, right=10mm}
+
+\usepackage{parskip}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[british]{babel}
 \usepackage{csquotes}
+\usepackage{fancyvrb}
+\VerbatimFootnotes
+\usepackage{orcidlink}
+\usepackage{academicons}
+\usepackage{fontawesome5}
+
+\usepackage{datetime}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\rfoot{\scriptsize \raggedright Last revised: \today}
+
 \usepackage{changepage}
 \usepackage{moresize}
-\usepackage{fancyhdr}
-\usepackage[colorlinks]{hyperref}
 \usepackage{xifthen}
 \usepackage{multicol}
 \usepackage{multirow}
@@ -20,10 +41,31 @@
 \floatplacement{table}{H}
 \usepackage{tikz}
 \usetikzlibrary{shapes, backgrounds, mindmap, trees}
-\usepackage{color}
+\usepackage[all,defaultlines=2]{nowidow}
+
+\usepackage{enumitem}
+\setlist[1]{labelindent=\parindent}
+\setlist[itemize]{leftmargin=*}
+\setlist[enumerate]{leftmargin=*}
+
+\usepackage[backend=biber, maxnames=99, sorting=ydnt, sortlocale=en-GB]{biblatex}
+\setlength\bibitemsep{0pt}
+\renewcommand*{\bibfont}{\small}
+\setlength\bibhang{\parindent}
+
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color}
+\hypersetup{
+  unicode=true,
+  colorlinks=true,
+  linkcolor=$if(linkcolor)$$linkcolor$$else$Maroon$endif$,
+  citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
+  urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+  breaklinks=true,
+  bookmarks=true
+}
 \definecolor{bgcol}{RGB}{110, 110, 110}
 \definecolor{softcol}{RGB}{225, 225, 225}
-\usepackage[backend=biber, maxnames=99, sorting=ydnt, sortlocale=en-GB]{biblatex}
 %------------------------------------------------------------------------------%
 
 % Macros to make my name bold in bibliography
@@ -65,39 +107,11 @@
 \settowidth{\spacebox}{123456789}
 \newcommand{\sepspace}{\vspace*{1em}}
 
-\setlength{\parindent}{0mm}
-
 \newcolumntype{x}[1]{%
 >{\raggedleft\hspace{0pt}}p{#1}}%
 
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
 \renewcommand{\thepage}{}
 \renewcommand{\thesection}{}
-
-% Title
-\newcommand{\name}[1]{
-  \Huge
-  \begin{center} \textbf{#1} \end{center}\par
-  \normalsize\normalfont
-}
-\newcommand{\updated}[1]{
-  \large
-  \begin{center} \textsl{#1} \end{center}\par
-  \normalsize \normalfont
-}
-
-% Personal information below title
-\newcommand{\info}[2]{
-  \noindent\hangindent=2em\hangafter=0
-  \parbox{\paperwidth}{
-    \textsl{#1}
-  }
-  #2 \par
-}
-
-% Print when was the CV last updated
-\newcommand{\updateinfo}[1][\today]{\par\vfill\hfill{\scriptsize\color{gray}Last updated on #1}}
 %------------------------------------------------------------------------------%
 
 % Custom section and meta-section

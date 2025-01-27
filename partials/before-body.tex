@@ -1,0 +1,22 @@
+% Custom title (adapted from https://github.com/mps9506/quarto-cv)
+
+\centerline{\Huge \bf $author$}
+
+\vspace{2mm}
+\hrule
+\vspace{2mm}
+
+$if(jobtitle)$\centerline{$jobtitle$}$endif$
+
+\centerline{
+  $if(email)$\faEnvelope \hspace{1mm} \href{mailto:}{\tt $email$} \hspace{1mm}$endif$
+  $if(web)$\faGlobe \hspace{1mm} \href{https://$web$}{\tt $web$}$endif$
+  $if(orcid)$\orcidlink{$orcid$} \hspace{.5mm} \href{https://orcid.org/$orcid$}{\tt $orcid$} \hspace{1mm}$endif$
+  $if(scholar)$\aiGoogleScholar \hspace{1mm} \href{https://scholar.google.com/citations?user=$scholar$}{\tt $scholar$} \hspace{1mm}$endif$
+  $if(github)$\faGithub \hspace{1mm} \href{http://github.com/$github$}{\tt $github$} \hspace{1mm}$endif$
+}
+
+\vspace{2mm}
+\hrule
+\vspace{4mm}
+%------------------------------------------------------------------------------%
