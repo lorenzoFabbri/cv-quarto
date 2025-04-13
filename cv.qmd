@@ -74,6 +74,15 @@ my_orcid <- "0000-0003-3031-322X"
 my_googlescholar <- "QbPv1H0AAAAJ"
 ```
 
+# Research Interests
+
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
+* Environmental and social determinants of **chronic diseases**, especially cancer and cardio-metabolic conditions.
+* **Life-course** epidemiology.
+* Transparent **causal** inference and evidence **triangulation**.
+
 # Academic Appointments
 
 \vspace{-0.5em}
@@ -110,6 +119,73 @@ exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
     what = "employment_summary_role_title",
     when = "dates",
     where = "location"
+  )
+```
+
+# Education
+
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
+
+```{r}
+#| label: education
+#| output: asis
+
+edu_raw <- rorcid::orcid_educations(orcid = my_orcid)
+edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    education_summary_end_date_year_value = tidyr::replace_na(
+      education_summary_end_date_year_value, "Present"
+    ),
+    education_summary_organization_name = stringr::str_replace_all(
+      education_summary_organization_name, "\\&", "and"
+    ),
+    location = paste0(
+      education_summary_organization_name,
+      " (",
+      education_summary_organization_address_city,
+      ", ",
+      education_summary_organization_address_country,
+      ")"
+    ),
+    dates = paste0(
+      education_summary_start_date_year_value,
+      " - ",
+      education_summary_end_date_year_value
+    ),
+    details = list(
+      c(
+        "Epidemiology by Distance Learning - Individual modules.",
+        "Fundamentals of Epidemiology (EPM101). Practical Epidemiology (EPM103)."
+      ), # LSHTM
+      c(
+        "Mathematical statistics (M347)."
+      ), # OU UK
+      c(
+        "Supervisor: Prof. Martine Vrijheid."
+      ),
+      c(
+        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity. Supervised by: Dr. Cesare Furlanello, Dr. Marco Chierici, Prof. Enrico Domenici.",
+        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases. Supervised by: Prof. Rebecca Wade, Dr. Daria Kokh, Prof. Raffaello Potestio.",
+        "Final mark: 110/110 With Honors."
+      ),
+      c(
+        "Project (USI, Lugano (CH)): Investigation by Computational Techniques of Channelopaties related to Sodium Channels. Supervised by: Prof. Vittorio Limongelli, Prof. Daniele Di Marino."
+      ),
+      c(
+        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid. Supervised by: Prof. Elena Maestri, Prof. Lars M. Blank, Dr. Henrik Cordes.",
+        "Final mark: 103/110."
+      )
+    )
+  ) |>
+  cvevents(
+    what = "education_summary_role_title",
+    when = "dates",
+    where = "location",
+    details = "details"
   )
 ```
 
@@ -307,73 +383,6 @@ talks <- tibble::tribble(
     what = "what",
     when = "when",
     where = "where"
-  )
-```
-
-# Education
-
-\vspace{-0.5em}
-\rule{\linewidth}{0.5pt}
-
-```{r}
-#| label: education
-#| output: asis
-
-edu_raw <- rorcid::orcid_educations(orcid = my_orcid)
-edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::mutate(
-    education_summary_end_date_year_value = tidyr::replace_na(
-      education_summary_end_date_year_value, "Present"
-    ),
-    education_summary_organization_name = stringr::str_replace_all(
-      education_summary_organization_name, "\\&", "and"
-    ),
-    location = paste0(
-      education_summary_organization_name,
-      " (",
-      education_summary_organization_address_city,
-      ", ",
-      education_summary_organization_address_country,
-      ")"
-    ),
-    dates = paste0(
-      education_summary_start_date_year_value,
-      " - ",
-      education_summary_end_date_year_value
-    ),
-    details = list(
-      c(
-        "Epidemiology by Distance Learning - Individual modules.",
-        "Fundamentals of Epidemiology (EPM101). Practical Epidemiology (EPM103)."
-      ), # LSHTM
-      c(
-        "Mathematical statistics (M347)."
-      ), # OU UK
-      c(
-        "Supervisor: Prof. Martine Vrijheid."
-      ),
-      c(
-        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity. Supervised by: Dr. Cesare Furlanello, Dr. Marco Chierici, Prof. Enrico Domenici.",
-        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases. Supervised by: Prof. Rebecca Wade, Dr. Daria Kokh, Prof. Raffaello Potestio.",
-        "Final mark: 110/110 With Honors."
-      ),
-      c(
-        "Project (USI, Lugano (CH)): Investigation by Computational Techniques of Channelopaties related to Sodium Channels. Supervised by: Prof. Vittorio Limongelli, Prof. Daniele Di Marino."
-      ),
-      c(
-        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid. Supervised by: Prof. Elena Maestri, Prof. Lars M. Blank, Dr. Henrik Cordes.",
-        "Final mark: 103/110."
-      )
-    )
-  ) |>
-  cvevents(
-    what = "education_summary_role_title",
-    when = "dates",
-    where = "location",
-    details = "details"
   )
 ```
 
