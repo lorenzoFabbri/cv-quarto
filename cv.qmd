@@ -22,7 +22,6 @@ format:
     filters:
       - partials/styles.lua
     citeproc: false
-    cite-method: biblatex
 
 bibliography: bibliography.bib
 csl: partials/ama11.csl
@@ -158,13 +157,14 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
     ),
     details = list(
       c(
-        "Epidemiology by Distance Learning - Individual modules.",
-        "Fundamentals of Epidemiology (EPM101). Practical Epidemiology (EPM103)."
+        "Fundamentals of Epidemiology (EPM101).",
+        "Practical Epidemiology (EPM103)."
       ), # LSHTM
       c(
-        "Mathematical statistics (M347)."
+        "Mathematical statistics (M347): 91/100 With Distinction."
       ), # OU UK
       c(
+        "Thesis: Early Life Exposure to Environmental Chemicals and Neurodevelopment through Childhood and Adolescence.",
         "Supervisor: Prof. Martine Vrijheid."
       ),
       c(
@@ -300,7 +300,7 @@ nocite: |
 
 ## Articles under review and revising
 
-1. *Prenatal and childhood exposure to mixtures of non-persistent endocrine disrupting chemicals (EDC) and adolescence neurodevelopment: a triangulation study.*
+1. *Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study.*
 
 ## Software packages
 
