@@ -22,6 +22,12 @@ format:
     filters:
       - partials/styles.lua
     citeproc: false
+    cite-method: biblatex
+    biblatexoptions:
+      - backend = biber
+      - maxnames = 99
+      - sorting = ydnt
+      - sortlocale = en-GB
 
 bibliography: bibliography.bib
 csl: partials/ama11.csl
