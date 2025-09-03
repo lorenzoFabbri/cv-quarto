@@ -163,8 +163,7 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
     ),
     details = list(
       c(
-        "Fundamentals of Epidemiology (EPM101).",
-        "Practical Epidemiology (EPM103)."
+        "Basic Epidemiology (PHM101)."
       ), # LSHTM
       c(
         "Mathematical statistics (M347): 91/100 With Distinction."
@@ -306,7 +305,7 @@ nocite: |
 
 ## Articles under review and revising
 
-1. *Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study.*
+1. Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study. Under review at *Environment International*.
 
 ## Software packages
 
@@ -525,9 +524,7 @@ skills <- tibble::tribble(
 colnames(skills) <- NULL
 
 tinytable::tt(skills) |>
-  tinytable::theme_tt(
-    theme = "void"
-  ) |>
+  tinytable::theme_void() |>
   tinytable::style_tt(
     j = 1,
     bold = TRUE
