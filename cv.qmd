@@ -34,6 +34,8 @@ csl: partials/ama11.csl
 
 execute:
   echo: false
+  warning: false
+  error: false
 
 editor_options:
   chunk_output_type: console
@@ -114,10 +116,18 @@ exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
       employment_summary_organization_address_country,
       ")"
     ),
-    dates = paste0(
-      employment_summary_start_date_year_value,
-      " - ",
+    start = paste0(
+      employment_summary_start_date_month_value, "/",
+      employment_summary_start_date_year_value
+    ),
+    end = paste0(
+      employment_summary_end_date_month_value, "/",
       employment_summary_end_date_year_value
+    ),
+    dates = paste0(
+      format(as.Date(lubridate::my(start)), "%b %Y"),
+      " - ",
+      format(as.Date(lubridate::my(end)), "%b %Y")
     )
   ) |>
   cvshortevents(
@@ -156,10 +166,28 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
       education_summary_organization_address_country,
       ")"
     ),
+    start = paste0(
+      education_summary_start_date_month_value, "/",
+      education_summary_start_date_year_value
+    ),
+    end = ifelse(
+      is.na(education_summary_end_date_month_value),
+      "Present",
+      format(
+        as.Date(
+          lubridate::my(
+            paste0(
+              education_summary_end_date_month_value,
+              "/",
+              education_summary_end_date_year_value
+            )
+          )
+        ),
+        "%b %Y"
+      )
+    ),
     dates = paste0(
-      education_summary_start_date_year_value,
-      " - ",
-      education_summary_end_date_year_value
+      format(as.Date(lubridate::my(start)), "%b %Y"), " - ", end
     ),
     details = list(
       c(
@@ -194,41 +222,55 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
   )
 ```
 
-<!-- # Research Visits -->
+# Research Visits
 
-<!-- ```{r} -->
-<!-- #| label: research_visits -->
-<!-- #| output: asis -->
+\vspace{-0.5em}
+\rule{\linewidth}{0.5pt}
 
-<!-- visits_raw <- rorcid::orcid_invited_positions(orcid = my_orcid) -->
-<!-- visits <- visits_raw[[my_orcid]]$`affiliation-group`$summaries |> -->
-<!--   dplyr::bind_rows() |> -->
-<!--   tibble::as_tibble() |> -->
-<!--   janitor::clean_names() |> -->
-<!--   dplyr::mutate( -->
-<!--     invited_position_end_date_year_value = tidyr::replace_na( -->
-<!--       invited_position_summary_end_date_year_value, "Present" -->
-<!--     ), -->
-<!--     location = paste0( -->
-<!--       invited_position_summary_organization_name, -->
-<!--       " (", -->
-<!--       invited_position_summary_organization_address_city, -->
-<!--       ", ", -->
-<!--       invited_position_summary_organization_address_country, -->
-<!--       ")" -->
-<!--     ), -->
-<!--     dates = paste0( -->
-<!--       invited_position_summary_start_date_year_value, -->
-<!--       " - ", -->
-<!--       invited_position_summary_end_date_year_value -->
-<!--     ) -->
-<!--   ) |> -->
-<!--   cvshortevents( -->
-<!--     what = "invited_position_summary_role_title", -->
-<!--     when = "dates", -->
-<!--     where = "location" -->
-<!--   ) -->
-<!-- ``` -->
+```{r}
+#| label: research_visits
+#| output: asis
+
+visits_raw <- rorcid::orcid_invited_positions(orcid = my_orcid)
+visits <- visits_raw[[my_orcid]]$`affiliation-group`$summaries |>
+  dplyr::bind_rows() |>
+  tibble::as_tibble() |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    invited_position_end_date_year_value = tidyr::replace_na(
+      invited_position_summary_end_date_year_value, "Present"
+    ),
+    location = paste0(
+      invited_position_summary_organization_name,
+      " (",
+      invited_position_summary_organization_address_city,
+      ", ",
+      invited_position_summary_organization_address_country,
+      ")"
+    ),
+    start = paste0(
+      invited_position_summary_start_date_month_value, "/",
+      invited_position_summary_start_date_year_value
+    ),
+    end = ifelse(
+      is.na(invited_position_summary_end_date_month_value), "Present",
+      paste0(
+        invited_position_summary_end_date_month_value, "/",
+        invited_position_summary_end_date_year_value
+      )
+    ),
+    dates = paste0(
+      format(as.Date(lubridate::my(start)), "%b %Y"),
+      " - ",
+      format(as.Date(lubridate::my(end)), "%b %Y")
+    )
+  ) |>
+  cvshortevents(
+    what = "invited_position_summary_role_title",
+    when = "dates",
+    where = "location"
+  )
+```
 
 # Grants and Fellowships
 
