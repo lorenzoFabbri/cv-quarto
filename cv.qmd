@@ -44,35 +44,105 @@ validate-yaml: false
 ---
 
 ```{r}
-cvevents <- function(tbl, what, when, where, details) {
+# R helper to emit LaTeX \cvevent and \cvshortevent calls for Quarto -> XeLaTeX
+# - Automatically splits bullets inside a CSV/TSV cell (default delim = newline)
+# - Escapes common LaTeX special chars
+# - Emits itemize environment when more than one bullet is present
+
+escape_latex <- function(s) {
+  s <- as.character(s)
+  # Order matters: handle backslash first
+  s <- gsub("\\\\", "\\\\textbackslash{}", s, perl = TRUE)
+  s <- gsub("%", "\\\\%", s, perl = TRUE)
+  s <- gsub("&", "\\\\&", s, perl = TRUE)
+  s <- gsub("\\$", "\\\\$", s, perl = TRUE)
+  s <- gsub("#", "\\\\#", s, perl = TRUE)
+  s <- gsub("_", "\\\\_", s, perl = TRUE)
+  s <- gsub("\\{", "\\\\{", s, perl = TRUE)
+  s <- gsub("\\}", "\\\\}", s, perl = TRUE)
+  s <- gsub("\\^", "\\\\^{}", s, perl = TRUE)
+  s <- gsub("~", "\\\\textasciitilde{}", s, perl = TRUE)
+  return(s)
+}
+
+# 'details' column may contain:
+# - a character vector already (length > 1)
+# - a single string with bullets separated by newline or another delimiter
+# The function accepts 'delim' defaulting to newline ("\n") or a regex (e.g. ";")
+cvevents <- function(tbl, what, when, where, details, delim = "\n") {
   command_start <- "\\cvevent"
-  res <- paste0(
-    command_start,
-    "{", tbl[[when]], "}",
-    "{", tbl[[what]], "}",
-    "{", tbl[[where]], "}"
-  )
-  
-  tbl[[details]] <- sapply(
-    tbl[[details]], function(x) {
-      paste0("{", x, "}", collapse = ",")
+  n <- nrow(tbl)
+  out <- character(n)
+
+  for (i in seq_len(n)) {
+    when_i <- as.character(tbl[[when]][i])
+    what_i <- as.character(tbl[[what]][i])
+    where_i <- as.character(tbl[[where]][i])
+
+    detail_cell <- tbl[[details]][i]
+
+    # Determine items: if it's already a vector, use it; otherwise split by delim
+    items <- if (is.list(detail_cell) && length(detail_cell[[1]]) > 1) {
+      # cell contains a list/vector of items
+      unlist(detail_cell[[1]])
+    } else {
+      # coerce to character and split by delimiter (use perl-style split for delim regex)
+      s <- as.character(detail_cell)
+      if (is.na(s) || nchar(trimws(s)) == 0) {
+        character(0)
+      } else {
+        # split: if delim == "\n" we use split on actual newlines; otherwise use delim as regex
+        if (identical(delim, "\n")) {
+          parts <- unlist(strsplit(s, "\\r?\\n"))
+        } else {
+          parts <- unlist(strsplit(s, delim, perl = TRUE))
+        }
+        parts <- trimws(parts)
+        parts[parts != ""]
+      }
     }
-  )
-  res <- paste0(res, "{", tbl[[details]], "}")
-  
-  cat(res, sep = "\n")
+
+    # Escape each item for LaTeX
+    items_escaped <- vapply(items, escape_latex, character(1), USE.NAMES = FALSE)
+
+    # Build LaTeX content for 4th argument
+    if (length(items_escaped) == 0) {
+      content <- "" # empty description
+    } else if (length(items_escaped) == 1) {
+      content <- items_escaped
+    } else {
+      # Create an itemize block with leftmargin=* so it aligns with CV style
+      content <- paste0("\\begin{itemize}[leftmargin=*]\n",
+                        paste0("  \\item ", items_escaped, collapse = "\n"),
+                        "\n\\end{itemize}")
+    }
+
+    # Wrap the content in braces so LaTeX sees a single argument
+    content_braced <- paste0("{", content, "}")
+
+    out[i] <- paste0(command_start,
+                     "{", when_i, "}",
+                     "{", what_i, "}",
+                     "{", where_i, "}",
+                     content_braced)
+  }
+
+  cat(out, sep = "\n")
 }
 
 cvshortevents <- function(tbl, what, when, where) {
-  command_start <- "\\cvshortevent"
-  res <- paste0(
-    command_start,
-    "{", tbl[[when]], "}",
-    "{", tbl[[what]], "}",
-    "{", tbl[[where]], "}"
-  )
-  
-  cat(res, sep = "\n")
+  n <- nrow(tbl)
+  out <- character(n)
+  for (i in seq_len(n)) {
+    when_i <- as.character(tbl[[when]][i])
+    what_i <- as.character(tbl[[what]][i])
+    where_i <- as.character(tbl[[where]][i])
+    out[i] <- paste0("\\cvshortevent",
+                     "{", when_i, "}",
+                     "{", what_i, "}",
+                     "{", where_i, "}")
+  }
+  cat(out, sep = "\n")
 }
 ```
 
@@ -566,7 +636,7 @@ skills <- tibble::tribble(
 colnames(skills) <- NULL
 
 tinytable::tt(skills) |>
-  tinytable::theme_void() |>
+  tinytable::theme_empty() |>
   tinytable::style_tt(
     j = 1,
     bold = TRUE
