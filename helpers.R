@@ -42,12 +42,10 @@ safe_orcid_date <- function(month, year) {
   if (tolower(y) == "present") {
     return("Present")
   }
-
   # If both missing, return empty
   if (y == "" && m == "") {
     return("")
   }
-
   # If year only, return year
   if (m == "") {
     return(y)
@@ -214,8 +212,6 @@ cvevents <- function(tbl,
 
     if (length(items_escaped) == 0) {
       content <- ""
-    } else if (length(items_escaped) == 1) {
-      content <- items_escaped
     } else {
       content <- paste0(
         "\\begin{itemize}[leftmargin=*]\n",
