@@ -6,7 +6,7 @@ email: lorenzo.fabbri@isglobal.org
 orcid: 0000-0003-3031-322X
 scholar: QbPv1H0AAAAJ
 github: lorenzoFabbri
-jobtitle: PhD Student
+jobtitle: Postdoctoral Fellow
 
 fontawesome: yes
 
@@ -30,7 +30,6 @@ format:
       - sortlocale = en-GB
 
 bibliography: bibliography.bib
-csl: partials/ama11.csl
 
 execute:
   echo: false
@@ -44,109 +43,10 @@ validate-yaml: false
 ---
 
 ```{r}
-# R helper to emit LaTeX \cvevent and \cvshortevent calls for Quarto -> XeLaTeX
-# - Automatically splits bullets inside a CSV/TSV cell (default delim = newline)
-# - Escapes common LaTeX special chars
-# - Emits itemize environment when more than one bullet is present
+#| results: asis
 
-escape_latex <- function(s) {
-  s <- as.character(s)
-  # Order matters: handle backslash first
-  s <- gsub("\\\\", "\\\\textbackslash{}", s, perl = TRUE)
-  s <- gsub("%", "\\\\%", s, perl = TRUE)
-  s <- gsub("&", "\\\\&", s, perl = TRUE)
-  s <- gsub("\\$", "\\\\$", s, perl = TRUE)
-  s <- gsub("#", "\\\\#", s, perl = TRUE)
-  s <- gsub("_", "\\\\_", s, perl = TRUE)
-  s <- gsub("\\{", "\\\\{", s, perl = TRUE)
-  s <- gsub("\\}", "\\\\}", s, perl = TRUE)
-  s <- gsub("\\^", "\\\\^{}", s, perl = TRUE)
-  s <- gsub("~", "\\\\textasciitilde{}", s, perl = TRUE)
-  return(s)
-}
+source("helpers.R")
 
-# 'details' column may contain:
-# - a character vector already (length > 1)
-# - a single string with bullets separated by newline or another delimiter
-# The function accepts 'delim' defaulting to newline ("\n") or a regex (e.g. ";")
-cvevents <- function(tbl, what, when, where, details, delim = "\n") {
-  command_start <- "\\cvevent"
-  n <- nrow(tbl)
-  out <- character(n)
-
-  for (i in seq_len(n)) {
-    when_i <- as.character(tbl[[when]][i])
-    what_i <- as.character(tbl[[what]][i])
-    where_i <- as.character(tbl[[where]][i])
-
-    detail_cell <- tbl[[details]][i]
-
-    # Determine items: if it's already a vector, use it; otherwise split by delim
-    items <- if (is.list(detail_cell) && length(detail_cell[[1]]) > 1) {
-      # cell contains a list/vector of items
-      unlist(detail_cell[[1]])
-    } else {
-      # coerce to character and split by delimiter (use perl-style split for delim regex)
-      s <- as.character(detail_cell)
-      if (is.na(s) || nchar(trimws(s)) == 0) {
-        character(0)
-      } else {
-        # split: if delim == "\n" we use split on actual newlines; otherwise use delim as regex
-        if (identical(delim, "\n")) {
-          parts <- unlist(strsplit(s, "\\r?\\n"))
-        } else {
-          parts <- unlist(strsplit(s, delim, perl = TRUE))
-        }
-        parts <- trimws(parts)
-        parts[parts != ""]
-      }
-    }
-
-    # Escape each item for LaTeX
-    items_escaped <- vapply(items, escape_latex, character(1), USE.NAMES = FALSE)
-
-    # Build LaTeX content for 4th argument
-    if (length(items_escaped) == 0) {
-      content <- "" # empty description
-    } else if (length(items_escaped) == 1) {
-      content <- items_escaped
-    } else {
-      # Create an itemize block with leftmargin=* so it aligns with CV style
-      content <- paste0("\\begin{itemize}[leftmargin=*]\n",
-                        paste0("  \\item ", items_escaped, collapse = "\n"),
-                        "\n\\end{itemize}")
-    }
-
-    # Wrap the content in braces so LaTeX sees a single argument
-    content_braced <- paste0("{", content, "}")
-
-    out[i] <- paste0(command_start,
-                     "{", when_i, "}",
-                     "{", what_i, "}",
-                     "{", where_i, "}",
-                     content_braced)
-  }
-
-  cat(out, sep = "\n")
-}
-
-cvshortevents <- function(tbl, what, when, where) {
-  n <- nrow(tbl)
-  out <- character(n)
-  for (i in seq_len(n)) {
-    when_i <- as.character(tbl[[when]][i])
-    what_i <- as.character(tbl[[what]][i])
-    where_i <- as.character(tbl[[where]][i])
-    out[i] <- paste0("\\cvshortevent",
-                     "{", when_i, "}",
-                     "{", what_i, "}",
-                     "{", where_i, "}")
-  }
-  cat(out, sep = "\n")
-}
-```
-
-```{r}
 my_orcid <- "0000-0003-3031-322X"
 my_googlescholar <- "QbPv1H0AAAAJ"
 ```
@@ -156,8 +56,7 @@ my_googlescholar <- "QbPv1H0AAAAJ"
 \vspace{-0.5em}
 \rule{\linewidth}{0.5pt}
 
-* Environmental and social determinants of **chronic diseases**, especially cancer and cardio-metabolic conditions.
-* **Life-course** epidemiology.
+* Environmental and social determinants of **cancer**.
 * Transparent **causal** inference and evidence **triangulation**.
 
 # Academic Appointments
@@ -166,45 +65,26 @@ my_googlescholar <- "QbPv1H0AAAAJ"
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: work_experience
-#| output: asis
 
-exp_raw <- rorcid::orcid_employments(orcid = my_orcid)
-exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::mutate(
-    employment_summary_end_date_year_value = tidyr::replace_na(
-      employment_summary_end_date_year_value, "Present"
-    ),
-    location = paste0(
-      employment_summary_organization_name,
-      " (",
-      employment_summary_organization_address_city,
-      ", ",
-      employment_summary_organization_address_country,
-      ")"
-    ),
-    start = paste0(
-      employment_summary_start_date_month_value, "/",
-      employment_summary_start_date_year_value
-    ),
-    end = paste0(
-      employment_summary_end_date_month_value, "/",
-      employment_summary_end_date_year_value
-    ),
-    dates = paste0(
-      format(as.Date(lubridate::my(start)), "%b %Y"),
-      " - ",
-      format(as.Date(lubridate::my(end)), "%b %Y")
-    )
-  ) |>
-  cvshortevents(
+render_orcid_section(
+  fetch_fun = rorcid::orcid_employments,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
     what = "employment_summary_role_title",
-    when = "dates",
-    where = "location"
-  )
+    org = "employment_summary_organization_name",
+    city = "employment_summary_organization_address_city",
+    country = "employment_summary_organization_address_country",
+    start_month = "employment_summary_start_date_month_value",
+    start_year = "employment_summary_start_date_year_value",
+    end_month = "employment_summary_end_date_month_value",
+    end_year = "employment_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("employment_summary_start_date_year_value"),
+  short = TRUE
+)
 ```
 
 # Education
@@ -213,83 +93,39 @@ exp_ <- exp_raw[[my_orcid]]$`affiliation-group`$summaries |>
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: education
-#| output: asis
 
-edu_raw <- rorcid::orcid_educations(orcid = my_orcid)
-edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::mutate(
-    education_summary_end_date_year_value = tidyr::replace_na(
-      education_summary_end_date_year_value, "Present"
-    ),
-    education_summary_organization_name = stringr::str_replace_all(
-      education_summary_organization_name, "\\&", "and"
-    ),
-    location = paste0(
-      education_summary_organization_name,
-      " (",
-      education_summary_organization_address_city,
-      ", ",
-      education_summary_organization_address_country,
-      ")"
-    ),
-    start = paste0(
-      education_summary_start_date_month_value, "/",
-      education_summary_start_date_year_value
-    ),
-    end = ifelse(
-      is.na(education_summary_end_date_month_value),
-      "Present",
-      format(
-        as.Date(
-          lubridate::my(
-            paste0(
-              education_summary_end_date_month_value,
-              "/",
-              education_summary_end_date_year_value
-            )
-          )
-        ),
-        "%b %Y"
-      )
-    ),
-    dates = paste0(
-      format(as.Date(lubridate::my(start)), "%b %Y"), " - ", end
-    ),
-    details = list(
-      c(
-        "Basic Epidemiology (PHM101)."
-      ), # LSHTM
-      c(
-        "Mathematical statistics (M347): 91/100 With Distinction."
-      ), # OU UK
-      c(
-        "Thesis: Early Life Exposure to Environmental Chemicals and Neurodevelopment through Childhood and Adolescence.",
-        "Supervisor: Prof. Martine Vrijheid."
-      ),
-      c(
-        "Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity. Supervised by: Dr. Cesare Furlanello, Dr. Marco Chierici, Prof. Enrico Domenici.",
-        "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases. Supervised by: Prof. Rebecca Wade, Dr. Daria Kokh, Prof. Raffaello Potestio.",
-        "Final mark: 110/110 With Honors."
-      ),
-      c(
-        "Project (USI, Lugano (CH)): Investigation by Computational Techniques of Channelopaties related to Sodium Channels. Supervised by: Prof. Vittorio Limongelli, Prof. Daniele Di Marino."
-      ),
-      c(
-        "Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid. Supervised by: Prof. Elena Maestri, Prof. Lars M. Blank, Dr. Henrik Cordes.",
-        "Final mark: 103/110."
-      )
-    )
-  ) |>
-  cvevents(
+# Hard-coded details for each education entry
+education_details <- list(
+  c(),
+  c(),
+  c("Basic Epidemiology (PHM101)."),
+  c("Mathematical statistics (M347): 91/100 With Distinction."),
+  c("Thesis: Early Life Exposure to Environmental Chemicals and Neurodevelopment through Childhood and Adolescence.", "Supervisor: Prof. Martine Vrijheid."),
+  c("Thesis (FBK, Trento (IT)): Machine Learning for Predictive Drug Induced Hepatotoxicity. Supervised by: Dr. Cesare Furlanello, Dr. Marco Chierici, Prof. Enrico Domenici.", "Internship (HITS, Heidelberg (DE)): Machine and Deep Learning for Predictive Unbinding Kinetics of Kinases. Supervised by: Prof. Rebecca Wade, Dr. Daria Kokh, Prof. Raffaello Potestio.", "Final mark: 110/110 With Honors."),
+  c("Project (USI, Lugano (CH)): Investigation by Computational Techniques of Channelopaties related to Sodium Channels. Supervised by: Prof. Vittorio Limongelli, Prof. Daniele Di Marino."),
+  c("Thesis (RWTH, Aachen (DE)):  Whole Body PBPK Modeling of Valproic Acid. Supervised by: Prof. Elena Maestri, Prof. Lars M. Blank, Dr. Henrik Cordes.", "Final mark: 103/110.")
+)
+
+render_orcid_section(
+  fetch_fun = rorcid::orcid_educations,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
     what = "education_summary_role_title",
-    when = "dates",
-    where = "location",
-    details = "details"
-  )
+    org = "education_summary_organization_name",
+    city = "education_summary_organization_address_city",
+    country = "education_summary_organization_address_country",
+    start_month = "education_summary_start_date_month_value",
+    start_year = "education_summary_start_date_year_value",
+    end_month = "education_summary_end_date_month_value",
+    end_year = "education_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("education_summary_start_date_year_value"),
+  short = FALSE,
+  details_override = education_details
+)
 ```
 
 # Research Visits
@@ -298,48 +134,26 @@ edu <- edu_raw[[my_orcid]]$`affiliation-group`$summaries |>
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: research_visits
-#| output: asis
 
-visits_raw <- rorcid::orcid_invited_positions(orcid = my_orcid)
-visits <- visits_raw[[my_orcid]]$`affiliation-group`$summaries |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::mutate(
-    invited_position_end_date_year_value = tidyr::replace_na(
-      invited_position_summary_end_date_year_value, "Present"
-    ),
-    location = paste0(
-      invited_position_summary_organization_name,
-      " (",
-      invited_position_summary_organization_address_city,
-      ", ",
-      invited_position_summary_organization_address_country,
-      ")"
-    ),
-    start = paste0(
-      invited_position_summary_start_date_month_value, "/",
-      invited_position_summary_start_date_year_value
-    ),
-    end = ifelse(
-      is.na(invited_position_summary_end_date_month_value), "Present",
-      paste0(
-        invited_position_summary_end_date_month_value, "/",
-        invited_position_summary_end_date_year_value
-      )
-    ),
-    dates = paste0(
-      format(as.Date(lubridate::my(start)), "%b %Y"),
-      " - ",
-      format(as.Date(lubridate::my(end)), "%b %Y")
-    )
-  ) |>
-  cvshortevents(
+render_orcid_section(
+  fetch_fun = rorcid::orcid_invited_positions,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
     what = "invited_position_summary_role_title",
-    when = "dates",
-    where = "location"
-  )
+    org = "invited_position_summary_organization_name",
+    city = "invited_position_summary_organization_address_city",
+    country = "invited_position_summary_organization_address_country",
+    start_month = "invited_position_summary_start_date_month_value",
+    start_year = "invited_position_summary_start_date_year_value",
+    end_month = "invited_position_summary_end_date_month_value",
+    end_year = "invited_position_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("invited_position_summary_start_date_year_value"),
+  short = TRUE
+)
 ```
 
 # Grants and Fellowships
@@ -348,33 +162,26 @@ visits <- visits_raw[[my_orcid]]$`affiliation-group`$summaries |>
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: funding
-#| output: asis
 
-funds_raw <- rorcid::orcid_fundings(orcid = my_orcid)
-funds <- funds_raw[[my_orcid]]$group$`funding-summary` |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  dplyr::mutate(
-    location = paste0(
-      organization_name,
-      " (",
-      organization_address_city,
-      ", ",
-      organization_address_country,
-      ")"
-    )
-  ) |>
-  dplyr::arrange(
-    dplyr::desc(start_date_year_value),
-    title_title_value
-  ) |>
-  cvshortevents(
+render_orcid_section(
+  fetch_fun = rorcid::orcid_fundings,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "group", "funding-summary"),
+  mapping = list(
     what = "title_title_value",
-    when = "start_date_year_value",
-    where = "location"
-  )
+    org = "organization_name",
+    city = "organization_address_city",
+    country = "organization_address_country",
+    start_month = "start_date_month_value",
+    start_year = "start_date_year_value",
+    end_month = "end_date_month_value",
+    end_year = "end_date_year_value"
+  ),
+  arrange_desc_cols = c("start_date_year_value"),
+  short = TRUE
+)
 ```
 
 # Honors and Awards
@@ -383,19 +190,26 @@ funds <- funds_raw[[my_orcid]]$group$`funding-summary` |>
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: honors
-#| output: asis
 
-honors_raw <- rorcid::orcid_distinctions(orcid = my_orcid)
-honors <- honors_raw[[my_orcid]]$`affiliation-group`$summaries |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  janitor::clean_names() |>
-  cvshortevents(
+render_orcid_section(
+  fetch_fun = rorcid::orcid_distinctions,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
     what = "distinction_summary_role_title",
-    when = "distinction_summary_start_date_year_value",
-    where = "distinction_summary_organization_name"
-  )
+    org = "distinction_summary_organization_name",
+    city = NULL,
+    country = NULL,
+    start_month = "distinction_summary_start_date_month_value",
+    start_year = "distinction_summary_start_date_year_value",
+    end_month = "distinction_summary_end_date_month_value",
+    end_year = "distinction_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("distinction_summary_start_date_year_value"),
+  short = TRUE
+)
 ```
 
 # Publications
@@ -417,13 +231,14 @@ nocite: |
 
 ## Articles under review and revising
 
-1. Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study. Under review at *Environment International*.
+1. Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study. Accepted at *Environment International*.
+1. Distinct tumor microenvironment signatures predict outcomes and correlate with PD-L1 in HPV-independent vulvar cancer.
 
 ## Software packages
 
 ```{r}
+#| results: asis
 #| label: software
-#| output: asis
 
 software_raw <- rorcid::orcid_works(orcid = my_orcid)
 software <- software_raw[[my_orcid]]$work |>
@@ -437,8 +252,8 @@ software <- software_raw[[my_orcid]]$work |>
     "url_value"
   ))) |>
   dplyr::arrange(
-    dplyr::desc("publication_date_year_value"),
-    "title_title_value"
+    dplyr::desc(.data$publication_date_year_value),
+    .data$title_title_value
   ) |>
   cvshortevents(
     what = "title_title_value",
@@ -454,11 +269,9 @@ software <- software_raw[[my_orcid]]$work |>
 
 ## Research presentations and conference participation
 
-See [https://figshare.com/authors/Lorenzo_Fabbri](https://figshare.com/authors/Lorenzo_Fabbri/11879642) for posters.
-
 ```{r}
+#| results: asis
 #| label: posters
-#| output: asis
 
 conf <- tibble::tribble(
   ~what, ~when, ~where,
@@ -482,20 +295,16 @@ conf <- tibble::tribble(
 See [https://github.com/lorenzoFabbri/talks](https://github.com/lorenzoFabbri/talks) for slides and materials.
 
 ```{r}
+#| results: asis
 #| label: talks
-#| output: asis
 
 talks <- tibble::tribble(
   ~what, ~when, ~where,
   "Transparent causal inference for observational epidemiology", "01/2025", "Colicino Group, NYC (via Zoom)"
 ) |>
-  dplyr::mutate(
-    when = lubridate::my(when)
-  ) |>
+  dplyr::mutate(when = lubridate::my(when)) |>
   dplyr::arrange(dplyr::desc(when)) |>
-  dplyr::mutate(
-    when = format(as.Date(when), "%b %Y")
-  ) |>
+  dplyr::mutate(when = format(as.Date(when), "%b %Y")) |>
   cvshortevents(
     what = "what",
     when = "when",
@@ -509,8 +318,8 @@ talks <- tibble::tribble(
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| results: asis
 #| label: cont_edu
-#| output: asis
 
 cont_edu <- tibble::tribble(
   ~what, ~when, ~where,
@@ -526,13 +335,9 @@ cont_edu <- tibble::tribble(
   "MARVEL School on Variationally Enhanced Sampling", "02/2017", "University of Lugano, Lugano (CH)",
   "Advanced Course in Alternatives to Animal Experimentation", "11/2015", "University of Genova, Genoa (IT)"
 ) |>
-  dplyr::mutate(
-    when = lubridate::my(when)
-  ) |>
+  dplyr::mutate(when = lubridate::my(when)) |>
   dplyr::arrange(dplyr::desc(when)) |>
-  dplyr::mutate(
-    when = format(as.Date(when), "%b %Y")
-  ) |>
+  dplyr::mutate(when = format(as.Date(when), "%b %Y")) |>
   cvshortevents(
     what = "what",
     when = "when",
@@ -552,71 +357,51 @@ cont_edu <- tibble::tribble(
 ## Working groups
 
 ```{r}
+#| results: asis
 #| label: service
-#| output: asis
 
-service_raw <- rorcid::orcid_services(orcid = my_orcid)
-service <- service_raw[[my_orcid]]$`affiliation-group` |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  tidyr::unnest(cols = "summaries") |>
-  janitor::clean_names() |>
-  dplyr::arrange(
-    dplyr::desc(service_summary_start_date_year_value),
-    dplyr::desc(service_summary_end_date_year_value)
-  ) |>
-  dplyr::mutate(
-    summary_end_date_year_value = tidyr::replace_na(
-      service_summary_end_date_year_value, "Present"
-    ),
-    dates = paste0(
-      service_summary_start_date_year_value,
-      " - ",
-      summary_end_date_year_value
-    ),
-    summary_role_title = service_summary_role_title,
-    summary_organization_name = service_summary_organization_name
-  ) |>
-  cvshortevents(
-    what = "summary_organization_name",
-    when = "dates",
-    where = "summary_role_title"
-  )
+render_orcid_section(
+  fetch_fun = rorcid::orcid_services,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
+    what = "service_summary_role_title",
+    org = "service_summary_organization_name",
+    city = "service_summary_organization_address_city",
+    country = "service_summary_organization_address_country",
+    start_month = "service_summary_start_date_month_value",
+    start_year = "service_summary_start_date_year_value",
+    end_month = "service_summary_end_date_month_value",
+    end_year = "service_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("service_summary_start_date_year_value"),
+  short = TRUE
+)
 ```
 
 ## Professional memberships
 
 ```{r}
+#| results: asis
 #| label: memberships
-#| output: asis
 
-memberships_raw <- rorcid::orcid_memberships(orcid = my_orcid)
-memberships <- memberships_raw[[my_orcid]]$`affiliation-group` |>
-  dplyr::bind_rows() |>
-  tibble::as_tibble() |>
-  tidyr::unnest(cols = "summaries") |>
-  janitor::clean_names() |>
-  dplyr::arrange(
-    dplyr::desc(membership_summary_start_date_year_value),
-    dplyr::desc(membership_summary_end_date_year_value)
-  ) |>
-  dplyr::mutate(
-    summary_end_date_year_value = tidyr::replace_na(
-      membership_summary_end_date_year_value, "Present"
-    ),
-    dates = paste0(
-      membership_summary_start_date_year_value,
-      " - ",
-      summary_end_date_year_value
-    ),
-    summary_role_title = "Member",
-    summary_organization_name = membership_summary_organization_name
-  ) |>
-  cvshortevents(
-    what = "summary_organization_name",
-    when = "dates",
-    where = "summary_role_title"
-  )
+render_orcid_section(
+  fetch_fun = rorcid::orcid_memberships,
+  orcid = my_orcid,
+  summaries_path = c(my_orcid, "affiliation-group", "summaries"),
+  mapping = list(
+    what = "membership_summary_organization_name",
+    org = "membership_summary_organization_name",
+    city = "membership_summary_organization_address_city",
+    country = "membership_summary_organization_address_country",
+    start_month = "membership_summary_start_date_month_value",
+    start_year = "membership_summary_start_date_year_value",
+    end_month = "membership_summary_end_date_month_value",
+    end_year = "membership_summary_end_date_year_value"
+  ),
+  arrange_desc_cols = c("membership_summary_start_date_year_value"),
+  short = TRUE
+)
 ```
 
 # Skills
@@ -625,6 +410,8 @@ memberships <- memberships_raw[[my_orcid]]$`affiliation-group` |>
 \rule{\linewidth}{0.5pt}
 
 ```{r}
+#| label: skills
+
 skills <- tibble::tribble(
   ~what, ~details,
   "Languages", "Italian (native), English (C1, IELTS 7.0), Spanish (basic)",
@@ -637,8 +424,5 @@ colnames(skills) <- NULL
 
 tinytable::tt(skills) |>
   tinytable::theme_empty() |>
-  tinytable::style_tt(
-    j = 1,
-    bold = TRUE
-  )
+  tinytable::style_tt(j = 1, bold = TRUE)
 ```

@@ -1,7 +1,7 @@
-% Include-in-header for CV (XeLaTeX-friendly and biblatex-ready)
 % Adapted from:
 %  - https://github.com/schochastics/classic-cv
 %  - https://github.com/mps9506/quarto-cv
+%  - Assisting with GitHub Copilot
 
 % --------------------------------------------------------------------
 % Page geometry
@@ -12,26 +12,24 @@
 % --------------------------------------------------------------------
 % XeLaTeX: fonts & language
 % --------------------------------------------------------------------
-\usepackage{fontspec} % XeLaTeX engine in Quarto
-% set a main font here if desired, e.g.:
-% \setmainfont{TeX Gyre Termes}
+\usepackage{fontspec}
 
 \usepackage[british]{babel}
 \usepackage{csquotes}
 
 % --------------------------------------------------------------------
-% Colours & hyperlinks (xcolor before hyperref)
+% Colours & hyperlinks
 % --------------------------------------------------------------------
 \usepackage[dvipsnames,usenames]{xcolor}
 \usepackage{hyperref}
 \hypersetup{
-  unicode=true,
-  colorlinks=true,
-  linkcolor=$if(linkcolor)$$linkcolor$$else$Maroon$endif$,
-  citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-  urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-  breaklinks=true,
-  bookmarks=true
+	unicode=true,
+	colorlinks=true,
+	linkcolor=$if(linkcolor)$$linkcolor$$else$Maroon$endif$,
+	citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
+	urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+	breaklinks=true,
+	bookmarks=true
 }
 
 \definecolor{bgcol}{RGB}{110, 110, 110}
@@ -40,7 +38,7 @@
 % --------------------------------------------------------------------
 % Basic layout
 % --------------------------------------------------------------------
-% Explicit paragraph settings (no parskip package to avoid conflicts)
+% Explicit paragraph settings
 \setlength{\parskip}{0pt}
 \setlength{\parindent}{0pt}
 
@@ -56,7 +54,7 @@
 % --------------------------------------------------------------------
 % Header/footer and date
 % --------------------------------------------------------------------
-\usepackage{datetime} % datetime2 may be used if you need more variants
+\usepackage{datetime}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \pagestyle{fancy}
@@ -71,7 +69,7 @@
 % --------------------------------------------------------------------
 % Helpers: layout, tables, graphics, tikz
 % --------------------------------------------------------------------
-\usepackage{changepage} % adjustwidth
+\usepackage{changepage}
 \usepackage{moresize}
 \usepackage{xifthen}
 \usepackage{multicol}
@@ -85,68 +83,64 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes, backgrounds, mindmap, trees}
 
-\usepackage[all,defaultlines=2]{nowidow} % widow/orphan control
+\usepackage[all,defaultlines=2]{nowidow}
 
+% --------------------------------------------------------------------
+% enumitem
+% --------------------------------------------------------------------
 \usepackage{enumitem}
 \setlist[1]{labelindent=\parindent}
 \setlist[itemize]{leftmargin=*}
 \setlist[enumerate]{leftmargin=*}
 
 % --------------------------------------------------------------------
-% Bibliography: ensure biblatex + biber interplay cleanly
-% - Guarded loading: if biblatex is already loaded by Quarto, do not reload
-% - Ensure the bibliography file is added
+% Bibliography
 % --------------------------------------------------------------------
-\usepackage{etoolbox} % used by name-highlighting macros (and for conditional logic)
+\usepackage{etoolbox}
 
-\makeatletter
-% If biblatex is not already loaded, load it with options consistent with YAML
-\@ifpackageloaded{biblatex}{}{%
-  \usepackage[backend=biber,maxnames=99,sorting=ydnt,sortlocale=en-GB]{biblatex}%
-}
-\makeatother
+% Explicitly load biblatex with options that mirror YAML
+\usepackage[backend=biber,maxnames=99,sorting=ydnt,sortlocale=en-GB]{biblatex}
 
 % Add the bibliography resource if it exists in the build folder
 \IfFileExists{bibliography.bib}{\addbibresource{bibliography.bib}}{}
 
-% Slightly reduce bibliography spacing (works with biblatex)
+% Slightly reduce bibliography spacing
 \setlength\bibitemsep{0pt}
 \renewcommand*{\bibfont}{\small}
 \setlength\bibhang{\parindent}
 
 % --------------------------------------------------------------------
 % Macros to make a selected name bold in bibliography entries
-% (these rely on etoolbox; keep them after etoolbox is loaded)
 % --------------------------------------------------------------------
 \def\makenamesetup{
-  \def\bibnamedelima{~}
-  \def\bibnamedelimb{ }
-  \def\bibnamedelimc{ }
-  \def\bibnamedelimd{ }
-  \def\bibnamedelimi{ }
-  \def\bibinitperiod{.}
-  \def\bibinitdelim{~}
-  \def\bibinithyphendelim{.-}
+	\def\bibnamedelima{~}
+	\def\bibnamedelimb{ }
+	\def\bibnamedelimc{ }
+	\def\bibnamedelimd{ }
+	\def\bibnamedelimi{ }
+	\def\bibinitperiod{.}
+	\def\bibinitdelim{~}
+	\def\bibinithyphendelim{.-}
 }
 \newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
 \newcommand*{\boldname}[3]{%
-  \def\lastname{#1}%
-  \def\firstname{#2}%
-  \def\firstinit{#3}%
+	\def\lastname{#1}%
+	\def\firstname{#2}%
+	\def\firstinit{#3}%
 }
 \renewcommand{\mkbibnamegiven}[1]{%
-  \ifboolexpr{
-    (test {\ifdefequal{\firstname}{\namepartgiven}} or
-     test {\ifdefequal{\firstinit}{\namepartgiven}}) and
-    test {\ifdefequal{\lastname}{\namepartfamily}}
-  }{\mkbibbold{#1}}{#1}%
+	\ifboolexpr{
+		(test {\ifdefequal{\firstname}{\namepartgiven}} or
+		test {\ifdefequal{\firstinit}{\namepartgiven}}) and
+		test {\ifdefequal{\lastname}{\namepartfamily}}
+		}{\mkbibbold{#1}}{#1}%
 }
 \renewcommand{\mkbibnamefamily}[1]{%
-  \ifboolexpr{
-    (test {\ifdefequal{\firstname}{\namepartgiven}} or
-     test {\ifdefequal{\firstinit}{\namepartgiven}}) and
-    test {\ifdefequal{\lastname}{\namepartfamily}}
-  }{\mkbibbold{#1}}{#1}%
+	\ifboolexpr{
+		(test {\ifdefequal{\firstname}{\namepartgiven}} or
+		test {\ifdefequal{\firstinit}{\namepartgiven}}) and
+		test {\ifdefequal{\lastname}{\namepartfamily}}
+		}{\mkbibbold{#1}}{#1}%
 }
 
 % --------------------------------------------------------------------
@@ -165,13 +159,13 @@
 % Section / meta-section commands
 % --------------------------------------------------------------------
 \newcommand{\cvsection}[1]{%
-  \begin{center}
-    \large{\textbf{#1}}
-  \end{center}%
+	\begin{center}
+		\large{\textbf{#1}}
+	\end{center}%
 }
 
 \newcommand{\metasection}[2]{%
-  \footnotesize{#2} \hspace*{\fill} \footnotesize{#1}\\[1pt]%
+	\footnotesize{#2} \hspace*{\fill} \footnotesize{#1}\\[1pt]%
 }
 
 % --------------------------------------------------------------------
@@ -179,27 +173,23 @@
 % - 4th parameter (#4) is raw LaTeX content (itemize/paragraphs) for reliability
 % --------------------------------------------------------------------
 \newcommand{\cvevent}[4]{%
-  \begin{tabular*}{1\textwidth}{p{13.6cm}x{3.9cm}}
-    \textbf{#2}\\
-    \textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{bgcol}{#1}
-  \end{tabular*}%
-  \vspace{-2pt}%
-  \textcolor{softcol}{\hrule}%
-  \vspace{6pt}%
-  \begin{adjustwidth}{2.5em}{0pt}%
-    #4%
-  \end{adjustwidth}%
-  \vspace{3pt}%
+	\begin{tabular*}{1\textwidth}{p{13.6cm}x{3.9cm}}
+		\textbf{#2}\\
+		\textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{bgcol}{#1}
+	\end{tabular*}%
+	\vspace{-2pt}%
+	\textcolor{softcol}{\hrule}%
+	\vspace{6pt}%
+	\begin{adjustwidth}{2.5em}{0pt}%
+		#4%
+	\end{adjustwidth}%
+	\vspace{3pt}%
 }
 
 \newcommand{\cvshortevent}[3]{%
-  \begin{tabular*}{1\textwidth}{p{13.6cm}x{3.9cm}}
-    \textbf{#2}\\
-    \textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{bgcol}{#1}
-  \end{tabular*}%
-  \vspace{3pt}%
+	\begin{tabular*}{1\textwidth}{p{13.6cm}x{3.9cm}}
+		\textbf{#2}\\
+		\textcolor{bgcol}{#3} & \vspace{2.5pt}\textcolor{bgcol}{#1}
+	\end{tabular*}%
+	\vspace{3pt}%
 }
-
-% --------------------------------------------------------------------
-% End of include-in-header.tex
-% --------------------------------------------------------------------
