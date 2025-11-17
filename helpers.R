@@ -84,8 +84,9 @@ safe_orcid_date <- function(month, year) {
 
 # - df: tibble/data.frame resulting from binding summaries (clean_names applied is expected)
 # - mapping: named list mapping standard names to original (cleaned) df column names
+# - show_present: whether to treat empty end dates as "Present"
 # Returns tibble with standard columns: what, start, end, dates, location, details (list column where present)
-map_orcid_fields <- function(df, mapping) {
+map_orcid_fields <- function(df, mapping, show_present = FALSE) {
   # Ensure df is a tibble
   df <- tibble::as_tibble(df)
 
@@ -115,7 +116,7 @@ map_orcid_fields <- function(df, mapping) {
   starts <- purrr::pmap_chr(list(start_month_col, start_year_col), safe_orcid_date)
   ends <- purrr::pmap_chr(list(end_month_col, end_year_col), safe_orcid_date)
 
-  # Build human-friendly dates:
+  # Build human-friendly dates
   dates <- vapply(seq_len(n), function(i) {
     s <- starts[i]
     e <- ends[i]
@@ -126,7 +127,12 @@ map_orcid_fields <- function(df, mapping) {
     } else if (s_empty && !e_empty) {
       e
     } else if (!s_empty && e_empty) {
-      s
+      # Only show "Present" if show_present is TRUE and end date is missing
+      if (show_present) {
+        paste0(s, " - Present")
+      } else {
+        s
+      }
     } else {
       paste0(s, " - ", e)
     }
@@ -275,7 +281,8 @@ render_orcid_section <- function(fetch_fun,
                                  mapping,
                                  arrange_desc_cols = NULL,
                                  short = TRUE,
-                                 details_override = NULL) {
+                                 details_override = NULL,
+                                 show_present = FALSE) {
   raw <- fetch_fun(orcid = orcid)
 
   # Drill down to summaries using summaries_path
@@ -317,7 +324,7 @@ render_orcid_section <- function(fetch_fun,
   }
 
   # Map to standard columns
-  norm <- map_orcid_fields(df, mapping)
+  norm <- map_orcid_fields(df, mapping, show_present)
 
   # If the caller provided an explicit details_override, attach/override the details column
   if (!is.null(details_override)) {

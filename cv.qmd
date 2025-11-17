@@ -83,7 +83,8 @@ render_orcid_section(
     end_year = "employment_summary_end_date_year_value"
   ),
   arrange_desc_cols = c("employment_summary_start_date_year_value"),
-  short = TRUE
+  short = TRUE,
+  show_present = TRUE
 )
 ```
 
@@ -124,7 +125,8 @@ render_orcid_section(
   ),
   arrange_desc_cols = c("education_summary_start_date_year_value"),
   short = FALSE,
-  details_override = education_details
+  details_override = education_details,
+  show_present = TRUE
 )
 ```
 
@@ -152,7 +154,8 @@ render_orcid_section(
     end_year = "invited_position_summary_end_date_year_value"
   ),
   arrange_desc_cols = c("invited_position_summary_start_date_year_value"),
-  short = TRUE
+  short = TRUE,
+  show_present = TRUE
 )
 ```
 
@@ -180,7 +183,8 @@ render_orcid_section(
     end_year = "end_date_year_value"
   ),
   arrange_desc_cols = c("start_date_year_value"),
-  short = TRUE
+  short = TRUE,
+  show_present = TRUE
 )
 ```
 
@@ -375,7 +379,8 @@ render_orcid_section(
     end_year = "service_summary_end_date_year_value"
   ),
   arrange_desc_cols = c("service_summary_start_date_year_value"),
-  short = TRUE
+  short = TRUE,
+  show_present = TRUE
 )
 ```
 
@@ -400,7 +405,8 @@ render_orcid_section(
     end_year = "membership_summary_end_date_year_value"
   ),
   arrange_desc_cols = c("membership_summary_start_date_year_value"),
-  short = TRUE
+  short = TRUE,
+  show_present = TRUE
 )
 ```
 
