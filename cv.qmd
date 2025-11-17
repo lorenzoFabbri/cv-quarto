@@ -235,7 +235,6 @@ nocite: |
 
 ## Articles under review and revising
 
-1. Prenatal and Childhood Exposure to Mixtures of Environmental Chemicals and Adolescence Attentional Problems: A Triangulation Study. Accepted at *Environment International*.
 1. Distinct tumor microenvironment signatures predict outcomes and correlate with PD-L1 in HPV-independent vulvar cancer.
 
 ## Software packages
