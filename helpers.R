@@ -336,7 +336,10 @@ render_orcid_section <- function(fetch_fun,
       norm$details <- details_override[seq_len(n_rows)]
     } else {
       # Pad with empty vectors for missing entries
-      norm$details <- c(details_override, rep(list(character(0)), n_rows - length(details_override)))
+      norm$details <- c(
+        details_override,
+        rep(list(character(0)), n_rows - length(details_override))
+      )
     }
   }
 
