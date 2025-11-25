@@ -236,6 +236,7 @@ nocite: |
 ## Articles under review and revising
 
 1. Distinct tumor microenvironment signatures predict outcomes and correlate with PD-L1 in HPV-independent vulvar cancer.
+1. Cohort Profile Update: The Human Early Life Exposome (HELIX) Cohort.
 
 ## Software packages
 
